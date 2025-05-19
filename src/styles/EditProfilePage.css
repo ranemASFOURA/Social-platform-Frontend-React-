@@ -36,3 +36,37 @@
   font-weight: bold;
   cursor: pointer;
 }
+.avatar-wrapper {
+  position: relative;
+  width: 100px;
+  margin: 0 auto 20px;
+}
+
+.edit-avatar {
+  width: 100px;
+  border-radius: 50%;
+  display: block;
+}
+
+.edit-icon-bottom {
+  position: absolute;
+  bottom: -5px;
+  right: -10px;
+  background-color: white;
+  padding: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.error-msg {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  display: block;
+}

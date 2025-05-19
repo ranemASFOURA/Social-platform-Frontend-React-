@@ -9,7 +9,7 @@ export default function SignupForm({ onSignupSuccess }) {
     lastname: '',
     email: '',
     password: '',
-    imageUrl: '' // سيملأ لاحقًا فقط إذا تم اختيار صورة
+    imageUrl: '' 
   });
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -47,9 +47,9 @@ export default function SignupForm({ onSignupSuccess }) {
     let finalImageUrl = formData.imageUrl;
 
     if (selectedFile) {
-      finalImageUrl = await uploadImageToMinIO(selectedFile); // استخدم الرابط الجديد مباشرة
+      finalImageUrl = await uploadImageToMinIO(selectedFile); 
     } else {
-      finalImageUrl = defaultAvatar; // إذا لم يتم رفع صورة، استخدم صورة default
+      finalImageUrl = defaultAvatar; 
     }
 
     const user = await createUser({ ...formData, imageUrl: finalImageUrl });
