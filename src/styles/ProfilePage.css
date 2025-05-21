@@ -1,46 +1,114 @@
 .profile-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
 }
 
 .profile-header {
   display: flex;
   align-items: center;
-  gap: 30px;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  justify-content: space-between;
+  background: #fff;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  width: 95%;
+  max-width: 600px;
+  position: relative;
 }
 
 .profile-avatar {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #e6e6e6;
+}
+
+.profile-info {
+  flex: 1;
+  margin-left: 24px;
 }
 
 .profile-info h2 {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
+  color: #262626;
 }
 
 .profile-info p {
-  color: #666;
-  margin: 5px 0;
+  margin: 4px 0;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.follow-inline-stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #262626;
+}
+
+.follow-inline-stats span:hover {
+  color: #007acc;
+  text-decoration: underline;
 }
 
 .edit-button {
-  padding: 8px 16px;
-  border: none;
+  margin-top: 14px;
   background-color: #0095f6;
+  border: none;
   color: white;
-  border-radius: 6px;
+  padding: 8px 18px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 .edit-button:hover {
-  background-color: #007acc;
+  background-color: #0077cc;
+}
+
+.follow-popup-box {
+  position: absolute;
+  top: 130px;
+  right: 24px;
+  width: 280px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  padding: 12px;
+  z-index: 999;
+}
+
+.follow-popup-box h4 {
+  margin-top: 0;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.follow-popup-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.follow-popup-box li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.follow-popup-box li img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
 }
