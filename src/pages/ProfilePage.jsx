@@ -5,6 +5,8 @@ import '../styles/ProfilePage.css';
 import { useNavigate } from 'react-router-dom';
 import { getFollowers, getFollowing } from '../services/followService';
 import { getUserById } from '../services/userService';
+import { getPostsByUser } from '../services/postService';
+
 
 export default function ProfilePage() {
   const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -14,6 +16,8 @@ export default function ProfilePage() {
   const [following, setFollowing] = useState([]);
   const [showPopup, setShowPopup] = useState(null); // 'followers' | 'following' | null
   const popupRef = useRef(null);
+  const [posts, setPosts] = useState([]);
+
 
   useEffect(() => {
     async function fetchFollowStats() {
@@ -40,6 +44,17 @@ export default function ProfilePage() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+  async function fetchData() {
+    if (user) {
+      const userPosts = await getPostsByUser(user.id);
+      setPosts(userPosts);
+    }
+  }
+  fetchData();
+}, [user]);
+
 
   if (!user) return <div>Please sign in first.</div>;
 
@@ -85,8 +100,16 @@ export default function ProfilePage() {
                   ))}
                 </ul>
               </div>
+              
             )}
+          </div> 
+        </div>
+        <div className="post-grid">
+        {posts.map(post => (
+          <div key={post.id} className="post-item">
+            <img src={post.imageUrl} alt={post.caption} />
           </div>
+        ))}
         </div>
       </div>
     </div>

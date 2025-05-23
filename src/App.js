@@ -6,7 +6,7 @@ import SearchPage from './pages/SearchPage';
 import ProfilePage from './pages/ProfilePage';
 import SignupPage from './pages/SignupPage';
 import EditProfilePage from './pages/EditProfilePage';
-
+import UploadPostPage from './pages/UploadPostPage';
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/upload" element={<UploadPostPage />} />
       </Routes>
     </Router>
   );
