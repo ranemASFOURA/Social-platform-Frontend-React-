@@ -7,17 +7,15 @@ import { getFollowers, getFollowing } from '../services/followService';
 import { getUserById } from '../services/userService';
 import { getPostsByUser } from '../services/postService';
 
-
 export default function ProfilePage() {
   const user = JSON.parse(localStorage.getItem('currentUser'));
   const navigate = useNavigate();
 
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
-  const [showPopup, setShowPopup] = useState(null); // 'followers' | 'following' | null
+  const [showPopup, setShowPopup] = useState(null);
   const popupRef = useRef(null);
   const [posts, setPosts] = useState([]);
-
 
   useEffect(() => {
     async function fetchFollowStats() {
@@ -46,70 +44,70 @@ export default function ProfilePage() {
   }, []);
 
   useEffect(() => {
-  async function fetchData() {
-    if (user) {
-      const userPosts = await getPostsByUser(user.id);
-      setPosts(userPosts);
+    async function fetchData() {
+      if (user) {
+        const userPosts = await getPostsByUser(user.id);
+        setPosts(userPosts);
+      }
     }
-  }
-  fetchData();
-}, [user]);
-
+    fetchData();
+  }, [user]);
 
   if (!user) return <div>Please sign in first.</div>;
 
   return (
     <div>
       <NavigationBar />
-      <div className="profile-container">
-        <div className="profile-header">
+      <div className="profile-main-container">
+        <div className="profile-summary">
           <img
             src={user.imageUrl || defaultAvatar}
             alt="avatar"
-            className="profile-avatar"
+            className="profile-avatar-large"
           />
-
-          <div className="profile-info">
-            <div className="profile-top">
+          <div className="profile-text-info">
+            <div className="profile-username-row">
               <h2>{user.firstname} {user.lastname}</h2>
-
-              <div className="follow-inline-stats">
-                <span onClick={() => setShowPopup('followers')}>Followers: {followers.length}</span>
-                <span onClick={() => setShowPopup('following')}>Following: {following.length}</span>
-              </div>
+              <button className="edit-button" onClick={() => navigate('/edit-profile')}>Edit profile</button>
             </div>
-
+            <div className="profile-follow-stats">
+              <span onClick={() => setShowPopup('followers')}>{followers.length} followers</span>
+              <span onClick={() => setShowPopup('following')}>{following.length} following</span>
+              <span>{posts.length} posts</span>
+            </div>
             <p>{user.email}</p>
-
-            <button className="edit-button" onClick={() => navigate('/edit-profile')}>
-              Edit Profile
-            </button>
-
-            {showPopup && (
-              <div className="follow-popup-box" ref={popupRef}>
-                <h4>{showPopup === 'followers' ? 'Followers' : 'Following'}</h4>
-                <ul>
-                  {(showPopup === 'followers' ? followers : following).map(u => (
-                    <li key={u.id}>
-                      <img src={u.imageUrl || defaultAvatar} alt="avatar" />
-                      <div>
-                        <strong>{u.firstname} {u.lastname}</strong>
-                        <p>{u.email}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-            )}
-          </div> 
-        </div>
-        <div className="post-grid">
-        {posts.map(post => (
-          <div key={post.id} className="post-item">
-            <img src={post.imageUrl} alt={post.caption} />
           </div>
-        ))}
+
+          {showPopup && (
+            <div className="follow-popup-box" ref={popupRef}>
+              <h4>{showPopup === 'followers' ? 'Followers' : 'Following'}</h4>
+              <ul>
+                {(showPopup === 'followers' ? followers : following).map(u => (
+                  <li key={u.id}>
+                    <img src={u.imageUrl || defaultAvatar} alt="avatar" />
+                    <div>
+                      <strong>{u.firstname} {u.lastname}</strong>
+                      <p>{u.email}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className="profile-posts-tabs">
+          <button className="tab-button active">POSTS</button>
+          <button className="tab-button" disabled>SAVED</button>
+          <button className="tab-button" disabled>TAGGED</button>
+        </div>
+
+        <div className="post-grid">
+          {posts.map(post => (
+            <div key={post.id} className="post-grid-item">
+              <img src={post.imageUrl} alt={post.caption} />
+            </div>
+          ))}
         </div>
       </div>
     </div>
