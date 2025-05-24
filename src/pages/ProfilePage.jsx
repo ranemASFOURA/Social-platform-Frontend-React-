@@ -79,19 +79,21 @@ export default function ProfilePage() {
           </div>
 
           {showPopup && (
-            <div className="follow-popup-box" ref={popupRef}>
-              <h4>{showPopup === 'followers' ? 'Followers' : 'Following'}</h4>
-              <ul>
-                {(showPopup === 'followers' ? followers : following).map(u => (
-                  <li key={u.id}>
-                    <img src={u.imageUrl || defaultAvatar} alt="avatar" />
-                    <div>
-                      <strong>{u.firstname} {u.lastname}</strong>
-                      <p>{u.email}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+            <div className="follow-popup-container">
+              <div className="follow-popup-box" ref={popupRef}>
+                <h4>{showPopup === 'followers' ? 'Followers' : 'Following'}</h4>
+                <ul>
+                  {(showPopup === 'followers' ? followers : following).map(u => (
+                    <li key={u.id} className="popup-user-item">
+                      <img src={u.imageUrl || defaultAvatar} alt="avatar" />
+                      <div>
+                        <strong>{u.firstname} {u.lastname}</strong>
+                        <p>{u.email}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
         </div>
