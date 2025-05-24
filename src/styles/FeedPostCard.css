@@ -1,0 +1,64 @@
+.feed-post-card {
+  max-width: 580px;
+  margin: 30px auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+.feed-post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #efefef;
+}
+
+.feed-post-header .avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.feed-post-header strong {
+  font-size: 16px;
+  color: #262626;
+}
+
+.feed-post-image {
+  width: 100%;
+  max-height: 600px;
+  object-fit: cover;
+}
+
+.feed-post-actions {
+  display: flex;
+  gap: 16px;
+  font-size: 20px;
+  padding: 10px 16px;
+}
+
+.caption {
+  padding: 0 16px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.timestamp {
+  padding: 0 16px;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.comment-input {
+  width: 92%;
+  margin: 10px 16px 16px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}

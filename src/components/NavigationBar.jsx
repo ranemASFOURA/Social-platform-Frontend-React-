@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/NavigationBar.css';
+import UploadModal from './UploadModal';
 
 export default function NavigationBar() {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+
 
   return (
     <div className="navbar">
@@ -20,9 +23,12 @@ export default function NavigationBar() {
 
       <div className="nav-icons">
         <button onClick={() => navigate('/timeline')} className="icon-btn">🔙</button>
-        <button onClick={() => navigate('/upload')} className="icon-btn">📤</button>
+        <button className="icon-btn add-post-btn" onClick={() => setShowModal(true)}>＋</button>
+
         <button onClick={() => navigate('/profile')} className="icon-btn">👤</button>
       </div>
+
+      {showModal && <UploadModal onClose={() => setShowModal(false)} />}
     </div>
   );
 }
