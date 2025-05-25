@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { getFollowers, getFollowing } from '../services/followService';
 import { getUserById } from '../services/userService';
 import { getPostsByUser } from '../services/postService';
+import { useLocation } from 'react-router-dom';
+
 
 export default function ProfilePage() {
   const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -16,6 +18,10 @@ export default function ProfilePage() {
   const [showPopup, setShowPopup] = useState(null);
   const popupRef = useRef(null);
   const [posts, setPosts] = useState([]);
+
+  const location = useLocation();
+const shouldReloadPosts = location.state?.reloadPosts || false;
+
 
   useEffect(() => {
     async function fetchFollowStats() {
@@ -44,14 +50,30 @@ export default function ProfilePage() {
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      if (user) {
-        const userPosts = await getPostsByUser(user.id);
-        setPosts(userPosts);
-      }
+  async function fetchPosts() {
+    if (user?.id) {
+      const userPosts = await getPostsByUser(user.id);
+      setPosts(userPosts);
     }
-    fetchData();
-  }, [user]);
+  }
+
+  fetchPosts();
+
+  if (shouldReloadPosts) {
+    window.history.replaceState({}, document.title);
+  }
+}, [user?.id, shouldReloadPosts]);
+
+
+  //useEffect(() => {
+    //async function fetchData() {
+      //if (user) {
+        //const userPosts = await getPostsByUser(user.id);
+        //setPosts(userPosts);
+      //}
+    //}
+    //fetchData();
+  //}, [user]);
 
   if (!user) return <div>Please sign in first.</div>;
 

@@ -36,7 +36,8 @@ export default function UploadPostPage() {
 
     if (postRes.ok) {
       alert("image uploaded sucessfully");
-      navigate('/profile');
+      navigate('/profile', { state: { reloadPosts: true } });
+
     } else {
       alert("failed upload");
     }

@@ -70,20 +70,26 @@ export default function EditProfilePage() {
         finalImageUrl = await uploadImageToMinIO(selectedFile);
       }
 
-      const updated = await updateUser(user.id, {
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        imageUrl: finalImageUrl,
-        password: password.trim() !== '' ? password : undefined
-      });
+      const updatedUserData = {
+  firstname: user.firstname,
+  lastname: user.lastname,
+  email: user.email,
+  imageUrl: finalImageUrl,
+};
+
+if (password.trim() !== '') {
+  updatedUserData.password = password;
+}
+
+const updated = await updateUser(user.id, updatedUserData);
+
 
       localStorage.setItem('currentUser', JSON.stringify(updated));
       alert('Profile updated successfully!');
       navigate('/profile');
     } catch (error) {
       console.error('Update failed:', error);
-      alert('Failed to update profile.');
+      alert(`Failed to update profile: ${error.message}`);
     }
   };
 
