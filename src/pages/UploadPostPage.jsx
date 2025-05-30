@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../components/NavigationBar';
 import { getPostsByUser } from '../services/postService';
+import { useCurrentUser } from '../contexts/UserContext';
 
 
 export default function UploadPostPage() {
-  const user = JSON.parse(localStorage.getItem('currentUser'));
+  const { currentUser: user } = useCurrentUser();
   const navigate = useNavigate();
   const [caption, setCaption] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -36,7 +37,7 @@ export default function UploadPostPage() {
 
     if (postRes.ok) {
       alert("image uploaded sucessfully");
-      navigate('/profile', { state: { reloadPosts: true } });
+      navigate(`/profile/${user.id}`, { state: { reloadPosts: true } });
 
     } else {
       alert("failed upload");

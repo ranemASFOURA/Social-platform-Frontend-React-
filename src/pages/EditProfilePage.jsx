@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { updateUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
 import '../styles/EditProfilePage.css';
 import defaultAvatar from '../assets/default-avatar.png';
 import NavigationBar from '../components/NavigationBar';
+import { useCurrentUser } from '../contexts/UserContext';
+
 
 export default function EditProfilePage() {
   const navigate = useNavigate();
-  const storedUser = JSON.parse(localStorage.getItem('currentUser'));
-  const [user, setUser] = useState(storedUser || {});
+  const { currentUser, setCurrentUser } = useCurrentUser();
+const [user, setUser] = useState(currentUser || {});
+useEffect(() => {
+  setUser(currentUser || {});
+}, [currentUser]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -84,9 +89,9 @@ if (password.trim() !== '') {
 const updated = await updateUser(user.id, updatedUserData);
 
 
-      localStorage.setItem('currentUser', JSON.stringify(updated));
+      setCurrentUser(updated); 
       alert('Profile updated successfully!');
-      navigate('/profile');
+      navigate(`/profile/${updated.id}`);
     } catch (error) {
       console.error('Update failed:', error);
       alert(`Failed to update profile: ${error.message}`);

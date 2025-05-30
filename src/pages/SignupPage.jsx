@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/SignupForm.css';
 import defaultAvatar from '../assets/default-avatar.png';
 import { createUser } from '../services/userService';
+import { useCurrentUser } from '../contexts/UserContext';
+
 
 export default function SignupForm() {
   const navigate = useNavigate();
+  const { setCurrentUser } = useCurrentUser();
+
 
   const [formData, setFormData] = useState({
     firstname: '',
@@ -78,7 +82,7 @@ export default function SignupForm() {
 
       if (user.id) {
         alert("User created successfully!");
-        localStorage.setItem('currentUser', JSON.stringify(user));
+        setCurrentUser(user);
         navigate('/timeline');
       } else {
         alert("Signup failed. Please try again.");

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import '../styles/UploadModal.css';
+import { useCurrentUser } from '../contexts/UserContext';
+
 
 export default function UploadModal({ onClose }) {
-  const user = JSON.parse(localStorage.getItem('currentUser'));
+  const { currentUser: user } = useCurrentUser();
+  console.log("Current user during upload:", user);
   const [caption, setCaption] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
 

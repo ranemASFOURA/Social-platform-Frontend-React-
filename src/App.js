@@ -17,7 +17,7 @@ function App() {
         <Route path="/timeline" element={<TimelinePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/upload" element={<UploadPostPage />} />
       </Routes>
     </Router>

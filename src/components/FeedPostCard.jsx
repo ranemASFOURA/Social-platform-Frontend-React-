@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import '../styles/FeedPostCard.css'; 
 import { getUserById } from '../services/userService';
 import { timeAgo } from '../utils/timeAgo';  
+import { useNavigate } from 'react-router-dom';
 
 export default function FeedPostCard({ post }) {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchUser() {
@@ -16,10 +18,10 @@ export default function FeedPostCard({ post }) {
 
   return (
     <div className="feed-post-card">
-      <div className="feed-post-header">
-        <img src={user?.imageUrl || "/default-avatar.png"} alt="User" className="avatar" />
-        <strong>{user ? `${user.firstname} ${user.lastname}` : post.userId}</strong>
-      </div>
+      <div className="feed-post-header" onClick={() => user && navigate(`/profile/${user.id}`)} style={{ cursor: "pointer" }}>
+      <img src={user?.imageUrl || "/default-avatar.png"} alt="User" className="avatar" />
+      <strong>{user ? `${user.firstname} ${user.lastname}` : post.userId}</strong>
+    </div>
       <img src={post.imageUrl} alt={post.caption} className="feed-post-image" />
       <div className="feed-post-actions">
         ❤️ 💬 📤 💾

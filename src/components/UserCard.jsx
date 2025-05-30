@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/UserCard.css';
 import defaultAvatar from '../assets/default-avatar.png';
+import { useNavigate } from 'react-router-dom';
 import { followUser, unfollowUser, isFollowing } from '../services/followService';
+import { useCurrentUser } from '../contexts/UserContext';
 
 export default function UserCard({ user }) {
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const { currentUser } = useCurrentUser();
   const [following, setFollowing] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function checkFollow() {
@@ -31,7 +34,16 @@ export default function UserCard({ user }) {
 
   return (
     <div className="user-card">
-      <div className="user-card-left">
+      <div
+  className="user-card-left"
+  onClick={() => {
+  if (window.location.pathname !== `/profile/${user.id}`) {
+    navigate(`/profile/${user.id}`);
+  }
+}}
+  style={{ cursor: "pointer" }}
+>
+
         <img
           src={user.imageUrl || defaultAvatar}
           alt="User avatar"

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/NavigationBar.css';
 import UploadModal from './UploadModal';
+import { useCurrentUser } from '../contexts/UserContext';
 
 export default function NavigationBar() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const { currentUser } = useCurrentUser();
 
 
   return (
@@ -20,12 +22,23 @@ export default function NavigationBar() {
           if (e.key === 'Enter') navigate(`/search?name=${e.target.value}`);
         }}
       />
-
       <div className="nav-icons">
         <button onClick={() => navigate('/timeline')} className="icon-btn">🔙</button>
         <button className="icon-btn add-post-btn" onClick={() => setShowModal(true)}>＋</button>
 
-        <button onClick={() => navigate('/profile')} className="icon-btn">👤</button>
+        <button
+  onClick={() => {
+    const currentPath = window.location.pathname;
+    const profilePath = `/profile/${currentUser.id}`;
+    if (currentPath !== profilePath) {
+      navigate(profilePath);
+    }
+  }}
+  className="icon-btn"
+>
+  👤
+</button>
+
       </div>
 
       {showModal && <UploadModal onClose={() => setShowModal(false)} />}
