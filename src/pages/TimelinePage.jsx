@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import NavigationBar from '../components/NavigationBar';
-import FeedPostCard from '../components/FeedPostCard';
+import FeedPostCard from '../components/PostCard';
 import { getUserFeed } from '../services/feedService';
+import { useCurrentUser } from '../contexts/UserContext';
 
 export default function TimelinePage() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const { currentUser: user } = useCurrentUser();
   const [feed, setFeed] = useState([]);
 
   useEffect(() => {

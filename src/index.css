@@ -1,13 +1,28 @@
+/* === Global Reset === */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
+/* === Global Code font === */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Courier New', Courier, monospace;
 }
+
+/* === Import Components CSS === */
+@import './styles/AvatarUploader.css';
+@import './styles/InputField.css';
+@import './styles/PrimaryButton.css';
+@import './styles/PostCard.css';
+@import './styles/FollowPopup.css';
+@import './styles/NavigationBar.css';
+
+@import './styles/SignupForm.css';
+@import './styles/EditProfilePage.css';
+@import './styles/UploadModal.css';
+@import './styles/ProfilePage.css';
+@import './styles/SearchPage.css';
+@import './styles/UserCard.css';
+

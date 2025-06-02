@@ -1,51 +1,43 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { updateUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
-import '../styles/EditProfilePage.css';
-import defaultAvatar from '../assets/default-avatar.png';
 import NavigationBar from '../components/NavigationBar';
 import { useCurrentUser } from '../contexts/UserContext';
-
+import AvatarUploader from '../components/AvatarUploader';
+import InputField from '../components/InputField';
+import PrimaryButton from '../components/PrimaryButton';
+import defaultAvatar from '../assets/default-avatar.png';
 
 export default function EditProfilePage() {
   const navigate = useNavigate();
   const { currentUser, setCurrentUser } = useCurrentUser();
-const [user, setUser] = useState(currentUser || {});
-useEffect(() => {
-  setUser(currentUser || {});
-}, [currentUser]);
+
+  const [user, setUser] = useState(currentUser || {});
   const [selectedFile, setSelectedFile] = useState(null);
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setUser(currentUser || {});
+  }, [currentUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
-
   const validate = () => {
     const newErrors = {};
-
     if (!user.firstname.trim()) newErrors.firstname = 'First name is required';
     if (!user.lastname.trim()) newErrors.lastname = 'Last name is required';
-
     if (!user.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
       newErrors.email = 'Invalid email format';
     }
-
     if (password.trim() && password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -70,26 +62,23 @@ useEffect(() => {
 
     try {
       let finalImageUrl = user.imageUrl;
-
       if (selectedFile) {
         finalImageUrl = await uploadImageToMinIO(selectedFile);
       }
 
       const updatedUserData = {
-  firstname: user.firstname,
-  lastname: user.lastname,
-  email: user.email,
-  imageUrl: finalImageUrl,
-};
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        imageUrl: finalImageUrl,
+      };
 
-if (password.trim() !== '') {
-  updatedUserData.password = password;
-}
+      if (password.trim() !== '') {
+        updatedUserData.password = password;
+      }
 
-const updated = await updateUser(user.id, updatedUserData);
-
-
-      setCurrentUser(updated); 
+      const updated = await updateUser(user.id, updatedUserData);
+      setCurrentUser(updated);
       alert('Profile updated successfully!');
       navigate(`/profile/${updated.id}`);
     } catch (error) {
@@ -103,49 +92,48 @@ const updated = await updateUser(user.id, updatedUserData);
       <NavigationBar />
       <div className="edit-profile-container">
         <h2>Edit Profile</h2>
-        <div className="avatar-section">
-          <div className="avatar-wrapper">
-            <img
-              src={selectedFile ? URL.createObjectURL(selectedFile) : (user.imageUrl || defaultAvatar)}
-              alt="avatar"
-              className="edit-avatar"
-            />
-            <label className="edit-icon-bottom">
-              ✏️<input type="file" accept="image/*" onChange={handleFileChange} hidden />
-            </label>
-          </div>
-        </div>
-
+        <AvatarUploader
+          selectedFile={selectedFile}
+          imageUrl={user.imageUrl || defaultAvatar}
+          onFileChange={(e) => setSelectedFile(e.target.files[0])}
+        />
         <form className="edit-form" onSubmit={handleSave}>
-          <div className="form-group">
-            <input name="firstname" value={user.firstname || ''} onChange={handleChange} placeholder="First Name" />
-            {errors.firstname && <span className="error-msg">{errors.firstname}</span>}
-          </div>
+          <InputField
+            name="firstname"
+            value={user.firstname || ''}
+            onChange={handleChange}
+            placeholder="First Name"
+            error={errors.firstname}
+          />
 
-          <div className="form-group">
-            <input name="lastname" value={user.lastname || ''} onChange={handleChange} placeholder="Last Name" />
-            {errors.lastname && <span className="error-msg">{errors.lastname}</span>}
-          </div>
+          <InputField
+            name="lastname"
+            value={user.lastname || ''}
+            onChange={handleChange}
+            placeholder="Last Name"
+            error={errors.lastname}
+          />
 
-          <div className="form-group">
-            <input name="email" value={user.email || ''} onChange={handleChange} placeholder="Email" />
-            {errors.email && <span className="error-msg">{errors.email}</span>}
-          </div>
+          <InputField
+            name="email"
+            value={user.email || ''}
+            onChange={handleChange}
+            placeholder="Email"
+            error={errors.email}
+          />
 
-          <div className="form-group">
-            <input
-              name="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="New Password (optional)"
-            />
-            {errors.password && <span className="error-msg">{errors.password}</span>}
-          </div>
+          <InputField
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="New Password (optional)"
+            error={errors.password}
+          />
 
-          <button type="submit">Save Changes</button>
+          <PrimaryButton type="submit">Save Changes</PrimaryButton>
         </form>
       </div>
     </div>
   );
-}
+} 

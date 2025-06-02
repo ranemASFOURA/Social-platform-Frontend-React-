@@ -10,11 +10,6 @@
   z-index: 1000;
 }
 
-.logo {
-  font-family: 'Cursive';
-  font-size: 24px;
-  cursor: pointer;
-}
 .nav-icons {
   display: flex;
   gap: 10px;
@@ -23,14 +18,17 @@
 .icon-btn {
   background: none;
   border: none;
-  font-size: 20px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  padding: 6px;
+  border-radius: 8px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .icon-btn:hover {
+  background-color: #f0f0f0;
   transform: scale(1.1);
 }
+
 
 
 .search-input {
@@ -46,4 +44,23 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 20px;
+  color: #333;
 }
