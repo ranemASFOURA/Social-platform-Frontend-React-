@@ -70,7 +70,7 @@ export default function ProfilePage() {
       const targetId = id || currentUser?.id;
       if (!targetId) return;
       const userPosts = await getPostsByUser(targetId);
-      setPosts(userPosts);
+      setPosts(userPosts.content || []);
     }
     if (profileUser) {
       fetchPosts();

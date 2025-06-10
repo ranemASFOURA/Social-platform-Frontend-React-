@@ -12,14 +12,18 @@ export default function EditProfilePage() {
   const navigate = useNavigate();
   const { currentUser, setCurrentUser } = useCurrentUser();
 
-  const [user, setUser] = useState(currentUser || {});
+  const [user, setUser] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    setUser(currentUser || {});
-  }, [currentUser]);
+  if (currentUser) {
+    setUser(currentUser);
+  }
+}, [currentUser]);
+if (!user) return <div>Loading...</div>;
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,6 +81,8 @@ export default function EditProfilePage() {
         updatedUserData.password = password;
       }
 
+      console.log("Sending update request for ID:", user.id);
+console.log("Payload:", updatedUserData);
       const updated = await updateUser(user.id, updatedUserData);
       setCurrentUser(updated);
       alert('Profile updated successfully!');
