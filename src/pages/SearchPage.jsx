@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { searchUsersByName } from '../services/searchService';
 import UserCard from '../components/UserCard';
 import NavigationBar from '../components/NavigationBar';
+import { useCurrentUser } from '../contexts/UserContext';
 import '../styles/SearchPage.css';
 
 function useQuery() {
@@ -13,12 +14,24 @@ export default function SearchPage() {
   const query = useQuery();
   const name = query.get('name');
   const [results, setResults] = useState([]);
+  const { currentUser } = useCurrentUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     async function fetchData() {
       if (name) {
-        const data = await searchUsersByName(name);
-        setResults(data);
+        try {
+          const data = await searchUsersByName(name);
+          setResults(data);
+        } catch (err) {
+          console.error('Search failed:', err);
+        }
       }
     }
     fetchData();

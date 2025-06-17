@@ -1,46 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../components/NavigationBar';
 import { useCurrentUser } from '../contexts/UserContext';
 import PrimaryButton from '../components/PrimaryButton';
+import { uploadImageToMinIO, createPost } from '../services/postService';
 
 export default function UploadPostPage() {
-  const { currentUser: user } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const navigate = useNavigate();
   const [caption, setCaption] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
 
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, [currentUser, navigate]);
+
   const handleUpload = async () => {
-    if (!selectedFile || !user) return;
+    if (!selectedFile || !currentUser) return;
 
     try {
-      const res = await fetch(`http://localhost:8084/api/images/generate-upload-url?filename=${selectedFile.name}`);
-      const { uploadUrl, fileUrl } = await res.json();
+      const fileUrl = await uploadImageToMinIO(selectedFile);
 
-      await fetch(uploadUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': selectedFile.type },
-        body: selectedFile
+      await createPost({
+        userId: currentUser.id,
+        caption,
+        imageUrl: fileUrl
       });
 
-      const postRes = await fetch('http://localhost:8084/api/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user.id,
-          caption,
-          imageUrl: fileUrl
-        })
-      });
-
-      if (postRes.ok) {
-        alert("Image uploaded successfully!");
-        navigate(`/profile/${user.id}`, { state: { reloadPosts: true } });
-      } else {
-        alert("Failed to upload post.");
-      }
-    } catch (err) {
-      alert("Upload error: " + err.message);
+      alert("Post uploaded!");
+      navigate(`/profile/${currentUser.id}`, { state: { reloadPosts: true } });
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Upload failed");
     }
   };
 

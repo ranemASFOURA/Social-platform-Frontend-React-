@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import NavigationBar from '../components/NavigationBar';
 import defaultAvatar from '../assets/default-avatar.png';
 import '../styles/ProfilePage.css';
+
 import { getFollowers, getFollowing, followUser, unfollowUser, isFollowing } from '../services/followService';
 import { getUserById } from '../services/userService';
 import { getPostsByUser } from '../services/postService';
@@ -11,10 +12,9 @@ import FollowPopup from '../components/FollowPopup';
 
 export default function ProfilePage() {
   const { id } = useParams(); 
-  const { currentUser } = useCurrentUser();
   const navigate = useNavigate();
   const location = useLocation();
-  const shouldReloadPosts = location.state?.reloadPosts || false;
+  const { currentUser } = useCurrentUser();
 
   const [profileUser, setProfileUser] = useState(null);
   const [followers, setFollowers] = useState([]);
@@ -23,6 +23,11 @@ export default function ProfilePage() {
   const [showPopup, setShowPopup] = useState(null);
   const [isFollowingUser, setIsFollowingUser] = useState(false);
   const [popupUsers, setPopupUsers] = useState([]);
+  const shouldReloadPosts = location.state?.reloadPosts || false;
+
+  useEffect(() => {
+    if (!currentUser) navigate('/login');
+  }, [currentUser]);
 
   useEffect(() => {
     window.scrollTo(0, 0); 
@@ -37,23 +42,22 @@ export default function ProfilePage() {
     async function fetchProfileUser() {
       const targetId = id || currentUser?.id;
       if (!targetId || profileUser?.id === targetId) return;
-      const userData = await getUserById(targetId);
-      setProfileUser(userData);
+      const data = await getUserById(targetId);
+      setProfileUser(data);
     }
     fetchProfileUser();
   }, [id, currentUser]);
 
   useEffect(() => {
-    async function fetchFollowStats() {
+    async function fetchFollowData() {
       const targetId = id || currentUser?.id;
       if (!targetId) return;
       const rawFollowers = await getFollowers(targetId);
       const rawFollowing = await getFollowing(targetId);
-
       setFollowers(rawFollowers.map(f => f.followerId));
       setFollowing(rawFollowing.map(f => f.followingId));
     }
-    fetchFollowStats();
+    fetchFollowData();
   }, [id, currentUser]);
 
   useEffect(() => {
@@ -66,40 +70,37 @@ export default function ProfilePage() {
   }, [showPopup]);
 
   useEffect(() => {
-    async function fetchPosts() {
+    async function fetchUserPosts() {
       const targetId = id || currentUser?.id;
       if (!targetId) return;
       const userPosts = await getPostsByUser(targetId);
       setPosts(userPosts.content || []);
     }
-    if (profileUser) {
-      fetchPosts();
-    }
+
+    if (profileUser) fetchUserPosts();
     if (shouldReloadPosts) {
       window.history.replaceState({}, document.title);
     }
   }, [id, currentUser, profileUser, shouldReloadPosts]);
 
   useEffect(() => {
-    async function checkFollow() {
+    async function checkIfFollowing() {
       if (currentUser && profileUser && currentUser.id !== profileUser.id) {
-        const following = await isFollowing(currentUser.id, profileUser.id);
+        const following = await isFollowing(profileUser.id);
         setIsFollowingUser(following);
       }
     }
-    checkFollow();
+    checkIfFollowing();
   }, [currentUser, profileUser]);
 
   const handleFollowToggle = async () => {
     if (!currentUser || !profileUser || currentUser.id === profileUser.id) return;
 
-    if (isFollowingUser) {
-      const success = await unfollowUser(currentUser.id, profileUser.id);
-      if (success) setIsFollowingUser(false);
-    } else {
-      const success = await followUser(currentUser.id, profileUser.id);
-      if (success) setIsFollowingUser(true);
-    }
+    const success = isFollowingUser
+      ? await unfollowUser(profileUser.id) 
+      : await followUser(profileUser.id);
+
+    if (success) setIsFollowingUser(!isFollowingUser);
   };
 
   if (!profileUser) return <div>Loading profile...</div>;

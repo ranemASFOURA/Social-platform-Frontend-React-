@@ -1,32 +1,40 @@
+import { getFullUrl, authHeader } from './api';
 
-const BASE_URL = 'http://localhost:8083/api/follow';
+const BASE_URL = getFullUrl('/api/follow');
 
-export async function followUser(followerId, followingId) {
-  const res = await fetch(`${BASE_URL}/${followerId}/follow/${followingId}`, {
-    method: 'POST'
+export async function followUser(followingId) {
+  const res = await fetch(`${BASE_URL}/follow/${followingId}`, {
+    method: 'POST',
+    headers: authHeader(),
   });
   return res.ok;
 }
 
-export async function unfollowUser(followerId, followingId) {
-  const res = await fetch(`${BASE_URL}/${followerId}/unfollow/${followingId}`, {
-    method: 'DELETE'
+export async function unfollowUser(followingId) {
+  const res = await fetch(`${BASE_URL}/unfollow/${followingId}`, {
+    method: 'DELETE',
+    headers: authHeader(),
   });
   return res.ok;
 }
 
 export async function getFollowers(userId) {
-  const res = await fetch(`${BASE_URL}/followers/${userId}`);
+  const res = await fetch(`${BASE_URL}/followers/${userId}`, {
+    headers: authHeader(),
+  });
   return res.json();
 }
 
 export async function getFollowing(userId) {
-  const res = await fetch(`${BASE_URL}/following/${userId}`);
+  const res = await fetch(`${BASE_URL}/following/${userId}`, {
+    headers: authHeader(),
+  });
   return res.json();
 }
 
-export async function isFollowing(followerId, followingId) {
-  const res = await fetch(`http://localhost:8083/api/follow/${followerId}/is-following/${followingId}`);
+export async function isFollowing(followingId) {
+  const res = await fetch(`${BASE_URL}/is-following/${followingId}`, {
+    headers: authHeader(),
+  });
   return res.ok;
 }
-

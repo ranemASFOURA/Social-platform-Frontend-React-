@@ -1,40 +1,29 @@
 import React, { useState } from 'react';
 import '../styles/UploadModal.css';
 import { useCurrentUser } from '../contexts/UserContext';
-
+import { uploadImageToMinIO, createPost } from '../services/postService';
 
 export default function UploadModal({ onClose }) {
   const { currentUser: user } = useCurrentUser();
-  console.log("Current user during upload:", user);
   const [caption, setCaption] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleUpload = async () => {
     if (!selectedFile || !user) return;
 
-    const res = await fetch(`http://localhost:8084/api/images/generate-upload-url?filename=${selectedFile.name}`);
-    const { uploadUrl, fileUrl } = await res.json();
+    try {
+      const fileUrl = await uploadImageToMinIO(selectedFile);
 
-    await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: { 'Content-Type': selectedFile.type },
-      body: selectedFile
-    });
-
-    const postRes = await fetch('http://localhost:8084/api/posts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      await createPost({
         userId: user.id,
         caption,
-        imageUrl: fileUrl
-      })
-    });
+        imageUrl: fileUrl,
+      });
 
-    if (postRes.ok) {
       alert("Post uploaded!");
       onClose();
-    } else {
+    } catch (error) {
+      console.error("Upload failed", error);
       alert("Upload failed");
     }
   };

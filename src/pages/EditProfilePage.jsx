@@ -7,6 +7,7 @@ import AvatarUploader from '../components/AvatarUploader';
 import InputField from '../components/InputField';
 import PrimaryButton from '../components/PrimaryButton';
 import defaultAvatar from '../assets/default-avatar.png';
+import { uploadImageToMinIO } from '../services/postService';
 
 export default function EditProfilePage() {
   const navigate = useNavigate();
@@ -18,12 +19,9 @@ export default function EditProfilePage() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-  if (currentUser) {
-    setUser(currentUser);
-  }
-}, [currentUser]);
-if (!user) return <div>Loading...</div>;
-
+    if (!currentUser) navigate('/login');
+    else setUser(currentUser);
+  }, [currentUser, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,20 +44,6 @@ if (!user) return <div>Loading...</div>;
     return Object.keys(newErrors).length === 0;
   };
 
-  const uploadImageToMinIO = async (file) => {
-    const response = await fetch(`http://localhost:8080/api/images/generate-upload-url?filename=${file.name}`);
-    const data = await response.json();
-    const { uploadUrl, fileUrl } = data;
-
-    await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: { 'Content-Type': file.type },
-      body: file
-    });
-
-    return fileUrl;
-  };
-
   const handleSave = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -75,15 +59,10 @@ if (!user) return <div>Loading...</div>;
         lastname: user.lastname,
         email: user.email,
         imageUrl: finalImageUrl,
+        ...(password.trim() && { password })
       };
 
-      if (password.trim() !== '') {
-        updatedUserData.password = password;
-      }
-
-      console.log("Sending update request for ID:", user.id);
-console.log("Payload:", updatedUserData);
-      const updated = await updateUser(user.id, updatedUserData);
+      const updated = await updateUser(updatedUserData);
       setCurrentUser(updated);
       alert('Profile updated successfully!');
       navigate(`/profile/${updated.id}`);
@@ -92,6 +71,8 @@ console.log("Payload:", updatedUserData);
       alert(`Failed to update profile: ${error.message}`);
     }
   };
+
+  if (!user) return <div>Loading...</div>;
 
   return (
     <div>
@@ -111,7 +92,6 @@ console.log("Payload:", updatedUserData);
             placeholder="First Name"
             error={errors.firstname}
           />
-
           <InputField
             name="lastname"
             value={user.lastname || ''}
@@ -119,7 +99,6 @@ console.log("Payload:", updatedUserData);
             placeholder="Last Name"
             error={errors.lastname}
           />
-
           <InputField
             name="email"
             value={user.email || ''}
@@ -127,7 +106,6 @@ console.log("Payload:", updatedUserData);
             placeholder="Email"
             error={errors.email}
           />
-
           <InputField
             name="password"
             type="password"
@@ -136,10 +114,9 @@ console.log("Payload:", updatedUserData);
             placeholder="New Password (optional)"
             error={errors.password}
           />
-
           <PrimaryButton type="submit">Save Changes</PrimaryButton>
         </form>
       </div>
     </div>
   );
-} 
+}

@@ -11,39 +11,28 @@ export default function UserCard({ user }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function checkFollow() {
-      if (currentUser && user.id !== currentUser.id) {
-        const result = await isFollowing(currentUser.id, user.id);
-        setFollowing(result);
-      }
+    if (currentUser && user.id !== currentUser.id) {
+      isFollowing(user.id).then(setFollowing);
     }
-    checkFollow();
   }, [currentUser, user]);
 
   const handleFollowToggle = async () => {
     if (!currentUser || user.id === currentUser.id) return;
 
-    if (following) {
-      const success = await unfollowUser(currentUser.id, user.id);
-      if (success) setFollowing(false);
-    } else {
-      const success = await followUser(currentUser.id, user.id);
-      if (success) setFollowing(true);
-    }
+    const success = following
+      ? await unfollowUser(user.id) 
+      : await followUser(user.id);
+
+    if (success) setFollowing(!following);
   };
 
   return (
     <div className="user-card">
       <div
-  className="user-card-left"
-  onClick={() => {
-  if (window.location.pathname !== `/profile/${user.id}`) {
-    navigate(`/profile/${user.id}`);
-  }
-}}
-  style={{ cursor: "pointer" }}
->
-
+        className="user-card-left"
+        onClick={() => navigate(`/profile/${user.id}`)}
+        style={{ cursor: "pointer" }}
+      >
         <img
           src={user.imageUrl || defaultAvatar}
           alt="User avatar"
@@ -54,11 +43,15 @@ export default function UserCard({ user }) {
           <p>{user.email}</p>
         </div>
       </div>
+
       {user.id !== currentUser?.id && (
         <button
           className="follow-btn"
           onClick={handleFollowToggle}
-          style={{ backgroundColor: following ? "#efefef" : "#0095f6", color: following ? "#000" : "#fff" }}
+          style={{
+            backgroundColor: following ? "#efefef" : "#0095f6",
+            color: following ? "#000" : "#fff"
+          }}
         >
           {following ? "Unfollow" : "Follow"}
         </button>

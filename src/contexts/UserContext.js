@@ -11,6 +11,21 @@ export function UserProvider({ children }) {
   }, []);
 
   useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    const payload = JSON.parse(atob(token.split('.')[1])); // decode base64 payload
+    setCurrentUser({
+      id: payload.sub,
+      email: payload.email,
+      firstname: payload.firstname,
+      lastname: payload.lastname,
+      type: payload.type
+    });
+  }
+}, []);
+
+
+  useEffect(() => {
     if (currentUser) {
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
     }

@@ -16,6 +16,7 @@
   border: 1px solid #ddd;
   border-radius: 10px;
   font-size: 16px;
+  align-items: center;
 }
 
 .signup-container button {

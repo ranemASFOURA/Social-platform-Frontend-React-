@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import '../styles/SignupForm.css';
-import { createUser } from '../services/userService';
 import defaultAvatar from '../assets/default-avatar.png';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '../contexts/UserContext';
-
+import { uploadImageToMinIO } from '../services/imageService';
 import AvatarUploader from './AvatarUploader';
 import PrimaryButton from './PrimaryButton';
 import InputField from './InputField';
+import { createUser } from '../services/userService';
+import { login } from '../services/authService';
 
 export default function SignupForm() {
   const navigate = useNavigate();
@@ -47,43 +48,47 @@ export default function SignupForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const uploadImageToMinIO = async (file) => {
-    const response = await fetch(`http://localhost:8080/api/images/generate-upload-url?filename=${file.name}`);
-    const data = await response.json();
-    const { uploadUrl, fileUrl } = data;
-
-    await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: { 'Content-Type': file.type },
-      body: file
-    });
-
-    return fileUrl;
-  };
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
+  e.preventDefault();
+  if (!validate()) return;
 
-    try {
-      let finalImageUrl = formData.imageUrl;
-      if (selectedFile) {
-        finalImageUrl = await uploadImageToMinIO(selectedFile);
-      } else {
-        finalImageUrl = defaultAvatar;
-      }
-
-      const user = await createUser({ ...formData, imageUrl: finalImageUrl });
-      if (user.id) {
-        alert("User created successfully!");
-        setCurrentUser(user);
-        navigate('/timeline');
-      } else {
-        alert("Signup failed. Please try again.");
-      }
-    } catch (err) {
-      alert("Server error: " + err.message);
+  try {
+    let finalImageUrl = formData.imageUrl;
+    
+    // Upload image to MinIO if a file is selected, otherwise use default avatar
+    if (selectedFile) {
+      finalImageUrl = await uploadImageToMinIO(selectedFile);
+    } else {
+      finalImageUrl = defaultAvatar;
     }
+
+    // ➀ Send request to create a new user
+    const user = await createUser({ ...formData, imageUrl: finalImageUrl });
+
+
+
+    // ➂ Receive the JWT token
+    const data = await login(formData.email, formData.password);
+    localStorage.setItem('token', data.token);
+
+    // ➃ Decode user information from the token
+    const payload = JSON.parse(atob(data.token.split('.')[1]));
+    const loggedInUser = {
+      id: payload.sub,
+      email: payload.email,
+      firstname: payload.firstname,
+      lastname: payload.lastname,
+      type: payload.type
+    };
+
+    // ➄ Update user context and redirect to timeline
+    setCurrentUser(loggedInUser);
+    navigate('/timeline');
+
+  } catch (err) {
+    console.error("Signup/Login error →", err);
+    alert("Signup/login error: " + err.message);
+  }
   };
 
   return (
