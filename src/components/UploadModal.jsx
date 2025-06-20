@@ -13,7 +13,9 @@ export default function UploadModal({ onClose }) {
     if (!selectedFile || !user) return;
 
     try {
+       console.log("Original image size:", (selectedFile.size / 1024).toFixed(2), "KB");
       const compressed = await compressImage(selectedFile);
+      console.log("Compressed image size:", (compressed.size / 1024).toFixed(2), "KB");
       const fileUrl = await uploadImageToMinIO(compressed);
 
 

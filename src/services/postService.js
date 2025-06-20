@@ -1,7 +1,6 @@
 import { getFullUrl, jsonAuthHeader, authHeader } from './api';
 
 const BASE_URL = getFullUrl('/api/posts');
-const IMAGE_BASE = getFullUrl('/api/images');
 
 
 export async function getPostsByUser(userId) {
@@ -12,13 +11,13 @@ export async function getPostsByUser(userId) {
   return res.json();
 }
 
-export async function generateUploadUrl(filename) {
-  const res = await fetch(`${IMAGE_BASE}/generate-upload-url?filename=${filename}`, {
-    headers: jsonAuthHeader(),
-  });
-  if (!res.ok) throw new Error("Failed to generate upload URL");
-  return res.json();
-}
+//export async function generateUploadUrl(filename) {
+ // const res = await fetch(`${BASE_URL}/images/generate-upload-url?filename=${filename}`, {
+   // headers: jsonAuthHeader(),
+  //});
+  //if (!res.ok) throw new Error("Failed to generate upload URL");
+ // return res.json();
+//}
 
 export async function createPost(postData) {
   const res = await fetch(getFullUrl('/api/posts'), {
@@ -35,11 +34,11 @@ export async function createPost(postData) {
 export async function uploadImageToMinIO(file) {
   const filename = encodeURIComponent(file.name);
 
-  const response = await fetch(getFullUrl(`/api/images/generate-upload-url?filename=${filename}`), {
+  const response = await fetch(`${BASE_URL}/images/generate-upload-url?filename=${filename}`, {
     headers: authHeader()  
   });
 
-  if (!response.ok) throw new Error("❌ Failed to get upload URL");
+  if (!response.ok) throw new Error("Failed to get upload URL");
 
   const { uploadUrl, fileUrl } = await response.json();
 
@@ -51,7 +50,7 @@ export async function uploadImageToMinIO(file) {
     body: file
   });
 
-  if (!uploadRes.ok) throw new Error("❌ Failed to upload image");
+  if (!uploadRes.ok) throw new Error("Failed to upload image");
 
   return fileUrl;
 }
