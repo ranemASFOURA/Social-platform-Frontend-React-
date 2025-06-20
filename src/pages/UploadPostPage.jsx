@@ -18,24 +18,24 @@ export default function UploadPostPage() {
   }, [currentUser, navigate]);
 
   const handleUpload = async () => {
-    if (!selectedFile || !currentUser) return;
+  if (!selectedFile) return;
 
-    try {
-      const fileUrl = await uploadImageToMinIO(selectedFile);
+  try {
+    const fileUrl = await uploadImageToMinIO(selectedFile);
 
-      await createPost({
-        userId: currentUser.id,
-        caption,
-        imageUrl: fileUrl
-      });
+    await createPost({
+      caption,
+      imageUrl: fileUrl
+    });
 
-      alert("Post uploaded!");
-      navigate(`/profile/${currentUser.id}`, { state: { reloadPosts: true } });
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Upload failed");
-    }
-  };
+    alert("Post uploaded!");
+    navigate('/profile', { state: { reloadPosts: true } });
+  } catch (error) {
+    console.error("Upload error:", error);
+    alert("Upload failed");
+  }
+};
+
 
   return (
     <div>

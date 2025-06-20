@@ -10,9 +10,14 @@ export async function login(email, password) {
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error("Login failed: " + text);
+    const errorText = await res.text();
+    throw new Error("Login failed: " + errorText);
   }
 
-  return res.json(); // { token: "..." }
+  const contentType = res.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return res.json(); 
+  } else {
+    throw new Error(" Server did not return JSON");
+  }
 }

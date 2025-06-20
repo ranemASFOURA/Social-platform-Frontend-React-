@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { searchUsersByName } from '../services/searchService';
 import UserCard from '../components/UserCard';
 import NavigationBar from '../components/NavigationBar';
-import { useCurrentUser } from '../contexts/UserContext';
 import '../styles/SearchPage.css';
 
 function useQuery() {
@@ -14,28 +13,33 @@ export default function SearchPage() {
   const query = useQuery();
   const name = query.get('name');
   const [results, setResults] = useState([]);
-  const { currentUser } = useCurrentUser();
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!currentUser) {
+    const token = localStorage.getItem('token');
+    if (!token) {
       navigate('/login');
+    } else {
+      setLoading(false);
     }
-  }, [currentUser, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
     async function fetchData() {
-      if (name) {
-        try {
-          const data = await searchUsersByName(name);
-          setResults(data);
-        } catch (err) {
-          console.error('Search failed:', err);
-        }
+      if (!name) return;
+      try {
+        const data = await searchUsersByName(name);
+        console.log("Users found:", data);
+        setResults(data);
+      } catch (err) {
+        console.error('Search failed:', err);
       }
     }
-    fetchData();
-  }, [name]);
+    if (!loading) fetchData();
+  }, [name, loading]);
+
+  if (loading) return null;
 
   return (
     <div className="search-wrapper">

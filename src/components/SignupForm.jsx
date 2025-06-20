@@ -69,21 +69,10 @@ export default function SignupForm() {
 
     // ➂ Receive the JWT token
     const data = await login(formData.email, formData.password);
-    localStorage.setItem('token', data.token);
-
-    // ➃ Decode user information from the token
-    const payload = JSON.parse(atob(data.token.split('.')[1]));
-    const loggedInUser = {
-      id: payload.sub,
-      email: payload.email,
-      firstname: payload.firstname,
-      lastname: payload.lastname,
-      type: payload.type
-    };
-
-    // ➄ Update user context and redirect to timeline
-    setCurrentUser(loggedInUser);
+    localStorage.setItem('token', data.token); 
+    
     navigate('/timeline');
+
 
   } catch (err) {
     console.error("Signup/Login error →", err);

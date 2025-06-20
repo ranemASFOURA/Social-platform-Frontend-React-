@@ -3,7 +3,6 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import NavigationBar from '../components/NavigationBar';
 import defaultAvatar from '../assets/default-avatar.png';
 import '../styles/ProfilePage.css';
-
 import { getFollowers, getFollowing, followUser, unfollowUser, isFollowing } from '../services/followService';
 import { getUserById } from '../services/userService';
 import { getPostsByUser } from '../services/postService';

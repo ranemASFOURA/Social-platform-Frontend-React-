@@ -26,7 +26,7 @@ export default function TimelinePage() {
     async function fetchInitialFeed() {
       if (currentUser?.id) {
         try {
-          const posts = await getUserFeed(currentUser.id, 0, PAGE_SIZE);
+          const posts = await getUserFeed(0, PAGE_SIZE);
           setFeed(posts);
           setPage(1);
           setHasMore(posts.length === PAGE_SIZE);
@@ -40,7 +40,7 @@ export default function TimelinePage() {
 
   const loadMore = async () => {
     try {
-      const newPosts = await getUserFeed(currentUser.id, page, PAGE_SIZE);
+      const newPosts = await getUserFeed(page, PAGE_SIZE);
       setFeed((prev) => [...prev, ...newPosts]);
       setPage((prev) => prev + 1);
       if (newPosts.length < PAGE_SIZE) setHasMore(false);

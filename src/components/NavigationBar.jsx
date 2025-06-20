@@ -37,17 +37,14 @@ export default function NavigationBar() {
 
         <button
   onClick={() => {
-    const currentPath = window.location.pathname;
-    const profilePath = `/profile/${currentUser.id}`;
-    if (currentPath !== profilePath) {
-      navigate(profilePath);
-    }
+    navigate('/profile');
   }}
   className="icon-btn"
-    title="Profile"
-  >
-    <User size={24} />
-  </button>
+  title="Profile"
+>
+  <User size={24} />
+</button>
+
 </div>
 
       {showModal && <UploadModal onClose={() => setShowModal(false)} />}

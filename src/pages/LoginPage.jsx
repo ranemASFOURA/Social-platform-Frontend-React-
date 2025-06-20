@@ -16,29 +16,41 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError(null);
+  e.preventDefault();
+  setError(null);
 
-    try {
-      const data = await login(form.email, form.password);
+  try {
+  
+    const data = await login(form.email, form.password);
+    localStorage.setItem('token', data.token);
 
-      localStorage.setItem('token', data.token);
+fetch('/api/users/me', {
+  headers: {
+    Authorization: `Bearer ${data.token}`
+  }
+})
+.then(async (res) => {
+  const contentType = res.headers.get("content-type");
+  if (res.ok && contentType && contentType.includes("application/json")) {
+    const user = await res.json();
+    setCurrentUser(user);
+  } else {
+    console.warn("Unexpected response from /me");
+  }
+})
+.catch(err => {
+  console.warn(" Error fetching user info:", err);
+});
 
-      const payload = JSON.parse(atob(data.token.split('.')[1]));
-      const user = {
-        id: payload.sub,
-        email: payload.email,
-        firstname: payload.firstname,
-        lastname: payload.lastname,
-        type: payload.type
-      };
 
-      setCurrentUser(user);
-      navigate('/timeline');
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+    navigate('/timeline');
+
+  } catch (err) {
+    setError(err.message || "Login failed");
+  }
+};
+
+
 
   return (
     <div className="login-container">

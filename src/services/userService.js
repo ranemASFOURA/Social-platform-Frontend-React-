@@ -1,4 +1,6 @@
 import { getFullUrl, jsonAuthHeader } from './api';
+import { authHeader } from './api';
+
 
 const BASE_URL = getFullUrl('/api/users');
 
@@ -36,3 +38,11 @@ export async function getUserById(userId) {
   if (!res.ok) throw new Error("Failed to fetch user data");
   return res.json();
 }
+
+export async function getCurrentUser() {
+  const res = await fetch(`${BASE_URL}/me`, {
+    headers: authHeader(),
+  });
+  return res.json();
+}
+

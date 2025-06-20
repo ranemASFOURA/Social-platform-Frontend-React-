@@ -9,10 +9,12 @@ import EditProfilePage from './pages/EditProfilePage';
 import UploadPostPage from './pages/UploadPostPage';
 import WelcomePage from './pages/WelcomePage';
 import LoginPage from './pages/LoginPage'; 
+import { UserProvider } from './contexts/UserContext';
 
 
 function App() {
   return (
+    <UserProvider>
     <Router>
       <Routes>
         <Route path="/" element={<WelcomePage />} />
@@ -21,10 +23,12 @@ function App() {
         <Route path="/timeline" element={<TimelinePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/upload" element={<UploadPostPage />} />
       </Routes>
     </Router>
+    </UserProvider>
   );
 }
 
