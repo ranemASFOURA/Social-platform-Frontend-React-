@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/UploadModal.css';
 import { useCurrentUser } from '../contexts/UserContext';
+import { compressImage } from '../services/imageCompressor'; 
 import { uploadImageToMinIO, createPost } from '../services/postService';
 
 export default function UploadModal({ onClose }) {
@@ -12,7 +13,9 @@ export default function UploadModal({ onClose }) {
     if (!selectedFile || !user) return;
 
     try {
-      const fileUrl = await uploadImageToMinIO(selectedFile);
+      const compressed = await compressImage(selectedFile);
+      const fileUrl = await uploadImageToMinIO(compressed);
+
 
       await createPost({
         userId: user.id,

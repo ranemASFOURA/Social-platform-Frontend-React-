@@ -8,6 +8,8 @@ import InputField from '../components/InputField';
 import PrimaryButton from '../components/PrimaryButton';
 import defaultAvatar from '../assets/default-avatar.png';
 import { uploadImageToMinIO } from '../services/imageService';
+import { compressImage } from '../services/imageCompressor'; 
+
 
 export default function EditProfilePage() {
   const navigate = useNavigate();
@@ -51,7 +53,11 @@ export default function EditProfilePage() {
     try {
       let finalImageUrl = user.imageUrl;
       if (selectedFile) {
-        finalImageUrl = await uploadImageToMinIO(selectedFile);
+        console.log("Original image size:", (selectedFile.size / 1024).toFixed(2), "KB");
+        const compressed = await compressImage(selectedFile);
+        console.log("Compressed image size:", (compressed.size / 1024).toFixed(2), "KB");
+        finalImageUrl = await uploadImageToMinIO(compressed);
+
       }
 
       const updatedUserData = {

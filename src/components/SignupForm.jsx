@@ -9,6 +9,8 @@ import PrimaryButton from './PrimaryButton';
 import InputField from './InputField';
 import { createUser } from '../services/userService';
 import { login } from '../services/authService';
+import { compressImage } from '../services/imageCompressor'; 
+
 
 export default function SignupForm() {
   const navigate = useNavigate();
@@ -57,7 +59,9 @@ export default function SignupForm() {
     
     // Upload image to MinIO if a file is selected, otherwise use default avatar
     if (selectedFile) {
-      finalImageUrl = await uploadImageToMinIO(selectedFile);
+      const compressed = await compressImage(selectedFile);
+      finalImageUrl = await uploadImageToMinIO(compressed);
+
     } else {
       finalImageUrl = defaultAvatar;
     }

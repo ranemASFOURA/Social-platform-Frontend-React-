@@ -4,6 +4,8 @@ import NavigationBar from '../components/NavigationBar';
 import { useCurrentUser } from '../contexts/UserContext';
 import PrimaryButton from '../components/PrimaryButton';
 import { uploadImageToMinIO, createPost } from '../services/postService';
+import { compressImage } from '../services/imageCompressor';
+
 
 export default function UploadPostPage() {
   const { currentUser } = useCurrentUser();
@@ -21,7 +23,9 @@ export default function UploadPostPage() {
   if (!selectedFile) return;
 
   try {
-    const fileUrl = await uploadImageToMinIO(selectedFile);
+    const compressed = await compressImage(selectedFile);
+    const fileUrl = await uploadImageToMinIO(compressed);
+
 
     await createPost({
       caption,
