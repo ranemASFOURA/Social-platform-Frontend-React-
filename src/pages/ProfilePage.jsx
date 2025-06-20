@@ -8,6 +8,8 @@ import { getUserById } from '../services/userService';
 import { getPostsByUser } from '../services/postService';
 import { useCurrentUser } from '../contexts/UserContext';
 import FollowPopup from '../components/FollowPopup';
+import ImageModal from '../components/ImageModal';
+
 
 export default function ProfilePage() {
   const { id } = useParams(); 
@@ -23,6 +25,9 @@ export default function ProfilePage() {
   const [isFollowingUser, setIsFollowingUser] = useState(false);
   const [popupUsers, setPopupUsers] = useState([]);
   const shouldReloadPosts = location.state?.reloadPosts || false;
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedCaption, setSelectedCaption] = useState('');
+
 
   useEffect(() => {
     if (!currentUser) navigate('/login');
@@ -158,12 +163,29 @@ export default function ProfilePage() {
         </div>
 
         <div className="post-grid">
-          {posts.map(post => (
-            <div key={post.id} className="post-grid-item">
-              <img src={post.imageUrl} alt={post.caption} />
-            </div>
-          ))}
-        </div>
+  {posts.map(post => (
+    <div
+      key={post.id}
+      className="post-grid-item"
+      onClick={() => {
+        setSelectedImage(post.imageUrl);
+        setSelectedCaption(post.caption);
+      }}
+      style={{ cursor: "pointer" }}
+    >
+      <img src={post.imageUrl} alt={post.caption} />
+    </div>
+  ))}
+</div>
+
+        {selectedImage && (
+  <ImageModal
+    imageUrl={selectedImage}
+    caption={selectedCaption}
+    onClose={() => setSelectedImage(null)}
+  />
+)}
+
       </div>
     </div>
   );

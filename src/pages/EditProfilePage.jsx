@@ -7,7 +7,7 @@ import AvatarUploader from '../components/AvatarUploader';
 import InputField from '../components/InputField';
 import PrimaryButton from '../components/PrimaryButton';
 import defaultAvatar from '../assets/default-avatar.png';
-import { uploadImageToMinIO } from '../services/postService';
+import { uploadImageToMinIO } from '../services/imageService';
 
 export default function EditProfilePage() {
   const navigate = useNavigate();
