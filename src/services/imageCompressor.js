@@ -13,14 +13,14 @@ export const compressImage = async (imageFile, customOptions = {}) => {
     maxSizeMB: 1,
     maxWidthOrHeight: 1024,
     useWebWorker: true,
-    fileType: 'image/webp' // 🔄 Convert image to WebP format
+    fileType: 'image/webp' //
   };
 
   const options = { ...defaultOptions, ...customOptions };
 
   try {
     const compressedFile = await imageCompression(imageFile, options);
-    console.log("🖼️ Converted to WebP. Size:", (compressedFile.size / 1024).toFixed(2), "KB");
+    console.log("Converted to WebP. Size:", (compressedFile.size / 1024).toFixed(2), "KB");
     return compressedFile;
   } catch (error) {
     console.error('Failed to compress image:', error);

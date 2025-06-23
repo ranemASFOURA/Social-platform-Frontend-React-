@@ -4,6 +4,7 @@ import defaultAvatar from '../assets/default-avatar.png';
 import { useNavigate } from 'react-router-dom';
 import { followUser, unfollowUser, isFollowing } from '../services/followService';
 import { useCurrentUser } from '../contexts/UserContext';
+import { convertToCDN } from '../utils/convertToCDN';
 
 export default function UserCard({ user }) {
   const { currentUser } = useCurrentUser();
@@ -34,10 +35,11 @@ export default function UserCard({ user }) {
         style={{ cursor: "pointer" }}
       >
         <img
-          src={user.imageUrl || defaultAvatar}
+          src={convertToCDN(user.imageUrl) || defaultAvatar}
           alt="User avatar"
           className="user-card-avatar"
         />
+
         <div className="user-card-info">
           <h4>{user.firstname} {user.lastname}</h4>
           <p>{user.email}</p>

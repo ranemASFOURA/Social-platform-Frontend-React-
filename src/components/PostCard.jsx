@@ -3,6 +3,7 @@ import { Heart, MessageCircle, Send, Bookmark } from 'lucide-react';
 import { getUserById } from '../services/userService';
 import { timeAgo } from '../utils/timeAgo';
 import { useNavigate } from 'react-router-dom';
+import { convertToCDN } from '../utils/convertToCDN';
 
 export default function FeedPostCard({ post }) {
   const [user, setUser] = useState(null);
@@ -23,14 +24,18 @@ export default function FeedPostCard({ post }) {
         onClick={() => user && navigate(`/profile/${user.id}`)}
       >
         <img
-          src={user?.imageUrl || "/default-avatar.png"}
+          src={convertToCDN(user?.imageUrl) || "/default-avatar.png"}
           alt="User"
           className="avatar"
         />
         <strong className="username">{user ? `${user.firstname} ${user.lastname}` : post.userId}</strong>
       </div>
 
-      <img src={post.imageUrl} alt={post.caption} className="feed-post-image" />
+      <img
+        src={convertToCDN(post.imageUrl)}
+        alt={post.caption}
+        className="feed-post-image"
+      />
 
       <div className="feed-post-actions">
         <Heart className="icon" />

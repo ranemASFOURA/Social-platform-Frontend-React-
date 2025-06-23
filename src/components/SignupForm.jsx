@@ -10,6 +10,7 @@ import InputField from './InputField';
 import { createUser } from '../services/userService';
 import { login } from '../services/authService';
 import { compressImage } from '../services/imageCompressor'; 
+import { getCurrentUser } from '../services/userService';
 
 
 export default function SignupForm() {
@@ -75,6 +76,8 @@ export default function SignupForm() {
     const data = await login(formData.email, formData.password);
     localStorage.setItem('token', data.token); 
     
+    const userData = await getCurrentUser();
+    setCurrentUser(userData);
     navigate('/timeline');
 
 

@@ -4,6 +4,7 @@ import InputField from '../components/InputField';
 import PrimaryButton from '../components/PrimaryButton';
 import { useCurrentUser } from '../contexts/UserContext';
 import { login } from '../services/authService';
+import { getCurrentUser } from '../services/userService';
 
 export default function LoginPage() {
   const { setCurrentUser } = useCurrentUser();
@@ -23,34 +24,14 @@ export default function LoginPage() {
   
     const data = await login(form.email, form.password);
     localStorage.setItem('token', data.token);
-
-fetch('/api/users/me', {
-  headers: {
-    Authorization: `Bearer ${data.token}`
-  }
-})
-.then(async (res) => {
-  const contentType = res.headers.get("content-type");
-  if (res.ok && contentType && contentType.includes("application/json")) {
-    const user = await res.json();
+    const user = await getCurrentUser();
     setCurrentUser(user);
-  } else {
-    console.warn("Unexpected response from /me");
-  }
-})
-.catch(err => {
-  console.warn(" Error fetching user info:", err);
-});
-
-
     navigate('/timeline');
 
   } catch (err) {
     setError(err.message || "Login failed");
   }
 };
-
-
 
   return (
     <div className="login-container">

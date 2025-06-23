@@ -9,7 +9,8 @@ import { getPostsByUser } from '../services/postService';
 import { useCurrentUser } from '../contexts/UserContext';
 import FollowPopup from '../components/FollowPopup';
 import ImageModal from '../components/ImageModal';
-
+import { getCdnUrl } from '../services/api';
+import { convertToCDN } from '../utils/convertToCDN';
 
 export default function ProfilePage() {
   const { id } = useParams(); 
@@ -53,16 +54,33 @@ export default function ProfilePage() {
   }, [id, currentUser]);
 
   useEffect(() => {
-    async function fetchFollowData() {
-      const targetId = id || currentUser?.id;
-      if (!targetId) return;
+  async function fetchFollowData() {
+    const targetId = id || currentUser?.id;
+    if (!targetId) return;
+
+    try {
       const rawFollowers = await getFollowers(targetId);
       const rawFollowing = await getFollowing(targetId);
-      setFollowers(rawFollowers.map(f => f.followerId));
-      setFollowing(rawFollowing.map(f => f.followingId));
+
+      console.log("rawFollowers =", rawFollowers);
+
+      
+      const safeFollowers = Array.isArray(rawFollowers) ? rawFollowers : [];
+      const safeFollowing = Array.isArray(rawFollowing) ? rawFollowing : [];
+
+      setFollowers(safeFollowers.map(f => f.followerId));
+      setFollowing(safeFollowing.map(f => f.followingId));
+
+    } catch (error) {
+      console.error("faild to get followers", error);
+      setFollowers([]); 
+      setFollowing([]);
     }
-    fetchFollowData();
-  }, [id, currentUser]);
+  }
+
+  fetchFollowData();
+}, [id, currentUser]);
+
 
   useEffect(() => {
     async function fetchPopupUsers() {
@@ -117,9 +135,9 @@ export default function ProfilePage() {
       <div className="profile-main-container">
         <div className="profile-summary">
           <img
-            src={profileUser.imageUrl || defaultAvatar}
-            alt="avatar"
-            className="profile-avatar-large"
+            src={convertToCDN(profileUser.imageUrl)|| defaultAvatar}
+            alt="Avatar"
+            className="profile-avatar"
           />
           <div className="profile-text-info">
             <div className="profile-username-row">
@@ -173,7 +191,7 @@ export default function ProfilePage() {
       }}
       style={{ cursor: "pointer" }}
     >
-      <img src={post.imageUrl} alt={post.caption} />
+      <img src={convertToCDN(post.imageUrl)} alt={post.caption} />
     </div>
   ))}
 </div>

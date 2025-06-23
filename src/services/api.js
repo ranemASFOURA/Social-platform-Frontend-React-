@@ -15,3 +15,4 @@ export function jsonAuthHeader() {
 export function getFullUrl(path) {
   return `${BASE_URL}${path}`;
 }
+
