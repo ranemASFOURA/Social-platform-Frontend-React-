@@ -1,69 +1,44 @@
 .signup-container {
-  width: 400px;
-  margin: 50px auto;
-  padding: 25px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', sans-serif;
-  text-align: center;
-}
-
-.signup-container input {
   width: 100%;
-  padding: 12px;
-  margin: 12px 0;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 16px;
-  align-items: center;
-}
-
-.signup-container button {
-  padding: 12px;
-  width: 100%;
-  background: #0095f6;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.avatar-wrapper {
-  position: relative;
+  height: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
 }
 
-.avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
-
-.edit-icon {
-  position: absolute;
-  bottom: 0;
-  right: 42%;
-  background: #fff;
-  border-radius: 50%;
-  padding: 2px 5px;
-  cursor: pointer;
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 0;
+  width: 100%;
+  max-width: 420px;
 }
 
 .form-group {
-  margin-bottom: 16px;
-  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  padding: 12px 16px;
+  border: 2px solid #E2CAD8;
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  border-color: #87A7D0;
 }
 
 .error-msg {
-  color: red;
+  color: #C18DB4;
   font-size: 12px;
-  margin-top: 4px;
-  display: block;
-  text-align: left;
-  padding-left: 4px;
+  margin-top: 5px;
 }
 

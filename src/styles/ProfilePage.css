@@ -1,32 +1,42 @@
+/* === ProfilePage.css === */
+
+body {
+  background: linear-gradient(135deg, #E2CAD8, #87A7D0);
+  font-family: 'Segoe UI', sans-serif;
+  color: #0E1F2F;
+  margin: 0;
+}
+
 .profile-main-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 30px 0;
-  background-color: #fafafa;
   min-height: 100vh;
+  background: linear-gradient(135deg, #E2CAD8, #87A7D0);
 }
 
 .profile-summary {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  width: 90%;
-  max-width: 800px;
-  margin-bottom: 30px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 92%;
+  max-width: 850px;
+  margin-bottom: 35px;
   gap: 32px;
 }
 
+.profile-avatar,
 .profile-avatar-large {
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e6e6e6;
+  border: 3px solid #87A7D0;
 }
 
 .profile-text-info {
@@ -39,61 +49,66 @@
 .profile-username-row {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .profile-follow-stats {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   font-weight: 500;
-  color: #262626;
+  color: #0E1B48;
   cursor: pointer;
 }
 
 .profile-follow-stats span:hover {
-  color: #0095f6;
+  color: #C18DB4;
   text-decoration: underline;
 }
 
 .edit-button {
-  padding: 6px 14px;
-  background-color: #0095f6;
+  padding: 6px 16px;
+  background-color: #0E1B48;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   color: white;
   font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .edit-button:hover {
-  background-color: #0077cc;
+  background-color: #27425D;
 }
 
 .profile-posts-tabs {
   display: flex;
   gap: 40px;
   margin-bottom: 20px;
-  border-top: 1px solid #dbdbdb;
-  border-bottom: 1px solid #dbdbdb;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   width: 100%;
-  max-width: 800px;
+  max-width: 850px;
   justify-content: center;
-  padding: 10px 0;
+  padding: 12px 0;
+  background-color: rgba(255,255,255,0.5);
+  border-radius: 12px;
 }
 
 .tab-button {
   background: none;
   border: none;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: 1px;
-  color: #8e8e8e;
+  color: #555;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
 .tab-button.active {
-  color: #262626;
-  border-bottom: 2px solid #262626;
+  color: #0E1B48;
+  border-bottom: 2px solid #0E1B48;
   padding-bottom: 4px;
 }
 
@@ -102,16 +117,21 @@
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   width: 90%;
-  max-width: 800px;
-  margin-bottom: 40px;
+  max-width: 850px;
+  margin-bottom: 50px;
 }
 
 .post-grid-item {
   width: 100%;
   aspect-ratio: 1/1;
   overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.post-grid-item:hover {
+  transform: translateY(-4px);
 }
 
 .post-grid-item img {
@@ -122,37 +142,39 @@
 
 .follow-popup-container {
   position: fixed;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 999;
-  background-color: rgba(0, 0, 0, 0.3);
-  width: 100vw;
-  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .follow-popup-box {
   background: white;
   border-radius: 12px;
   padding: 20px;
-  width: 300px;
-  max-height: 400px;
+  width: 320px;
+  max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  position: relative;
-  margin: 100px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .popup-user-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
 }
 
 .popup-user-item img {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }

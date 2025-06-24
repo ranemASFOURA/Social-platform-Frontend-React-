@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import NavigationBar from '../components/NavigationBar';
+import NavigationBar from '../components/Sidebar';
+import RightPanel from '../components/RightPanel';
 import defaultAvatar from '../assets/default-avatar.png';
 import '../styles/ProfilePage.css';
 import { getFollowers, getFollowing, followUser, unfollowUser, isFollowing } from '../services/followService';
@@ -9,8 +10,8 @@ import { getPostsByUser } from '../services/postService';
 import { useCurrentUser } from '../contexts/UserContext';
 import FollowPopup from '../components/FollowPopup';
 import ImageModal from '../components/ImageModal';
-import { getCdnUrl } from '../services/api';
 import { convertToCDN } from '../utils/convertToCDN';
+import Sidebar from '../components/Sidebar';
 
 export default function ProfilePage() {
   const { id } = useParams(); 
@@ -130,8 +131,12 @@ export default function ProfilePage() {
   const isCurrentUser = profileUser.id === currentUser?.id;
 
   return (
-    <div>
-      <NavigationBar />
+  <div className="profile-page-layout">
+    <div className="left-sidebar">
+      <Sidebar />
+    </div>
+
+    <div className="profile-center">
       <div className="profile-main-container">
         <div className="profile-summary">
           <img
@@ -197,14 +202,18 @@ export default function ProfilePage() {
 </div>
 
         {selectedImage && (
-  <ImageModal
-    imageUrl={selectedImage}
-    caption={selectedCaption}
-    onClose={() => setSelectedImage(null)}
-  />
-)}
-
+          <ImageModal
+            imageUrl={selectedImage}
+            caption={selectedCaption}
+            onClose={() => setSelectedImage(null)}
+          />
+        )}
       </div>
     </div>
-  );
+
+    <div className="right-sidebar">
+      <RightPanel />
+    </div>
+  </div>
+);
 }

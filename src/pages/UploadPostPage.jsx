@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationBar from '../components/NavigationBar';
+import NavigationBar from '../components/Sidebar';
 import { useCurrentUser } from '../contexts/UserContext';
 import PrimaryButton from '../components/PrimaryButton';
 import { uploadImageToMinIO, createPost } from '../services/postService';

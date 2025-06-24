@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { searchUsersByName } from '../services/searchService';
 import UserCard from '../components/UserCard';
-import NavigationBar from '../components/NavigationBar';
+import NavigationBar from '../components/Sidebar';
+import RightPanel from '../components/RightPanel'
 import '../styles/SearchPage.css';
 
 function useQuery() {
@@ -11,7 +12,8 @@ function useQuery() {
 
 export default function SearchPage() {
   const query = useQuery();
-  const name = query.get('name');
+  const initialName = query.get('name') || '';
+  const [searchInput, setSearchInput] = useState(initialName);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -26,25 +28,52 @@ export default function SearchPage() {
   }, [navigate]);
 
   useEffect(() => {
-    async function fetchData() {
-      if (!name) return;
+    async function fetchSearchResults() {
+      if (!searchInput.trim()) {
+        setResults([]);
+        return;
+      }
+
       try {
-        const data = await searchUsersByName(name);
+        const data = await searchUsersByName(searchInput.trim());
         console.log("Users found:", data);
         setResults(data);
       } catch (err) {
         console.error('Search failed:', err);
       }
     }
-    if (!loading) fetchData();
-  }, [name, loading]);
+
+    if (!loading) fetchSearchResults();
+  }, [searchInput, loading]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.elements.search.value.trim();
+    setSearchInput(name);
+  };
 
   if (loading) return null;
 
-  return (
-    <div className="search-wrapper">
+
+     return (
+    <div style={{ display: 'flex' }}>
       <NavigationBar />
-      <div className="search-page">
+
+      <div className="search-content">
+        {/* حقل البحث */}
+        <form onSubmit={handleSubmit} className="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search by name..."
+            defaultValue={searchInput}
+            className="search-input"
+          />
+          <button type="submit" className="search-button">Search</button>
+        </form>
+
+        {/* نتائج البحث */}
         <div className="search-results">
           {results.length > 0 ? (
             results.map((user) => (
@@ -55,6 +84,10 @@ export default function SearchPage() {
           )}
         </div>
       </div>
+
+      <RightPanel />
     </div>
   );
 }
+
+

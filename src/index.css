@@ -15,9 +15,8 @@ code {
 @import './styles/AvatarUploader.css';
 @import './styles/InputField.css';
 @import './styles/PrimaryButton.css';
-@import './styles/PostCard.css';
 @import './styles/FollowPopup.css';
-@import './styles/NavigationBar.css';
+@import './styles/Sidebar.css';
 
 @import './styles/SignupForm.css';
 @import './styles/EditProfilePage.css';
@@ -25,4 +24,8 @@ code {
 @import './styles/ProfilePage.css';
 @import './styles/SearchPage.css';
 @import './styles/UserCard.css';
-
+@import './styles/WelcomePage.css';
+@import './styles/TimelinePage.css';
+@import './styles/SignupPage.css';
+@import './styles/LoginPage.css';
+@import './styles/ImageModal.css';

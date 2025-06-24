@@ -1,6 +1,6 @@
-// components/AvatarUploader.jsx
 import React from 'react';
 import defaultAvatar from '../assets/default-avatar.png';
+
 
 export default function AvatarUploader({ selectedFile, imageUrl, onFileChange }) {
   return (

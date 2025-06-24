@@ -2,57 +2,65 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
-  padding: 14px 20px;
-  margin: 16px auto;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  width: 95%;
-  max-width: 520px;
-  transition: transform 0.2s;
+  background: #ffffff;
+  padding: 20px 30px;
+  margin: 15px 0;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  height: 40%;
+  max-width: 600px;
+  transition: transform 0.2s ease;
 }
 
 .user-card:hover {
-  transform: translateY(-2px);
-}
-
-.user-card-left {
-  display: flex;
-  align-items: center;
+  transform: translateY(-4px);
 }
 
 .user-card-avatar {
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e6e6e6;
-  margin-right: 16px;
+  margin-right: 20px;
+  border: 2px solid #C18DB4;
+}
+
+.user-card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .user-card-info h4 {
   margin: 0;
   font-size: 18px;
-  color: #262626;
+  color: #0E1B48;
+  font-weight: 600;
 }
 
 .user-card-info p {
-  margin: 4px 0 0;
+  margin: 5px 0 0;
   font-size: 14px;
-  color: #8e8e8e;
+  color: #27425D;
 }
 
 .follow-btn {
-  background-color: #0095f6;
-  border: none;
+  background-color: #A66B9E;
   color: white;
-  padding: 8px 18px;
-  border-radius: 8px;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-size: 15px;
   cursor: pointer;
-  font-weight: 500;
   transition: background-color 0.2s ease;
 }
 
 .follow-btn:hover {
-  background-color: #0077cc;
+  background-color: #A66B9E;
+}
+
+.user-card-left {
+  display: flex;
+  align-items: center;
 }

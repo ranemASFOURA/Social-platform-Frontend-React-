@@ -89,13 +89,13 @@ export default function SignupForm() {
 
   return (
     <div className="signup-container">
-      <AvatarUploader
+      
+      <form onSubmit={handleSubmit} className="signup-form">
+        <AvatarUploader
         selectedFile={selectedFile}
         imageUrl={formData.imageUrl}
         onFileChange={(e) => setSelectedFile(e.target.files[0])}
-      />
-
-      <form onSubmit={handleSubmit} className="signup-form">
+        />
         <InputField name="firstname" value={formData.firstname} onChange={handleChange} placeholder="First Name" error={errors.firstname} />
         <InputField name="lastname" value={formData.lastname} onChange={handleChange} placeholder="Last Name" error={errors.lastname} />
         <InputField name="email" value={formData.email} onChange={handleChange} placeholder="Email" error={errors.email} />

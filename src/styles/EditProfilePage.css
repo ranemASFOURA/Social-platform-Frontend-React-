@@ -1,72 +1,34 @@
+
+.edit-profile-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 60px;
+  background: linear-gradient(to bottom right, #d8c2d6, #a7c1dc);
+  min-height: 100vh;
+}
+
 .edit-profile-container {
-  max-width: 400px;
-  margin: 40px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 460px;
+  background: #ffffff;
+  padding: 30px 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
 }
+
 .edit-profile-container h2 {
   text-align: center;
   margin-bottom: 20px;
-}
-.edit-avatar {
-  width: 100px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-.edit-form input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-.edit-form button {
-  width: 100%;
-  padding: 12px;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-.avatar-wrapper {
-  position: relative;
-  width: 100px;
-  margin: 0 auto 20px;
+  color: #0E1B48;
 }
 
-.edit-avatar {
-  width: 100px;
-  border-radius: 50%;
-  display: block;
+.avatar-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
-.edit-icon-bottom {
-  position: absolute;
-  bottom: -5px;
-  right: -10px;
-  background-color: white;
-  padding: 4px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 18px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.error-msg {
-  color: red;
-  font-size: 13px;
-  margin-top: 4px;
-  display: block;
-}

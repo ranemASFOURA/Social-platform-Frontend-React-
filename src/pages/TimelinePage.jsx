@@ -1,74 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import NavigationBar from '../components/NavigationBar';
-import FeedPostCard from '../components/PostCard';
+import Sidebar from '../components/Sidebar';
+import RightPanel from '../components/RightPanel';
+import FeedPostCard from '../components/FeedPostCard';
 import { getUserFeed } from '../services/feedService';
+import '../styles/TimelinePage.css';
 import { useCurrentUser } from '../contexts/UserContext';
-import { useNavigate } from 'react-router-dom';
 
 export default function TimelinePage() {
+  const [posts, setPosts] = useState([]);
   const { currentUser } = useCurrentUser();
-  const navigate = useNavigate();
-
-  const [page, setPage] = useState(0);
-  const [feed, setFeed] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-
-  const PAGE_SIZE = 10;
 
   useEffect(() => {
-    if (!currentUser) {
-      navigate('/login');
+    async function fetchFeed() {
+      const data = await getUserFeed();
+      setPosts(data);
     }
-  }, [currentUser, navigate]);
-
-  useEffect(() => {
-    async function fetchInitialFeed() {
-      if (currentUser?.id) {
-        try {
-          const posts = await getUserFeed(0, PAGE_SIZE);
-          setFeed(posts);
-          setPage(1);
-          setHasMore(posts.length === PAGE_SIZE);
-        } catch (err) {
-          console.error("Failed to load initial feed", err);
-        }
-      }
-    }
-    fetchInitialFeed();
-  }, [currentUser]);
-
-  const loadMore = async () => {
-    try {
-      const newPosts = await getUserFeed(page, PAGE_SIZE);
-      setFeed((prev) => [...prev, ...newPosts]);
-      setPage((prev) => prev + 1);
-      if (newPosts.length < PAGE_SIZE) setHasMore(false);
-    } catch (err) {
-      console.error("Failed to load more posts", err);
-    }
-  };
+    fetchFeed();
+  }, []);
 
   return (
-    <div>
-      <NavigationBar />
-      <div className="timeline-container">
-        <InfiniteScroll
-          dataLength={feed.length}
-          next={loadMore}
-          hasMore={hasMore}
-          loader={<h4 style={{ textAlign: 'center' }}>Loading...</h4>}
-          endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>No more posts to show.</b>
-            </p>
-          }
-        >
-          {feed.map((post) => (
-            <FeedPostCard key={post.postId} post={post} />
+    <div className="timeline-wrapper">
+      <Sidebar />
+
+      <div className="timeline-body">
+        {/* Main Feed in the center */}
+        <main className="main-feed">
+          <div className="feed-title">
+            <h2>Welcome back, {currentUser?.firstname}!</h2>
+          </div>
+          {posts.map(post => (
+            <FeedPostCard key={post.id} post={post} />
           ))}
-        </InfiniteScroll>
+        </main>
       </div>
+
+      <RightPanel />
     </div>
   );
 }

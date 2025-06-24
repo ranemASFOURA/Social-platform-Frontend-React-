@@ -1,0 +1,116 @@
+
+.sidebar {
+  width: 300px;
+  background: linear-gradient(to bottom, #0b122e, #1d4a74);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 20px;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+  cursor: pointer;
+}
+
+.sidebar-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.sidebar-title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #E2CAD8;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 23px; 
+  margin-bottom: 20px;
+  margin-top: -10px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #C18DB4;
+  border: none;
+  color: #0E1B48;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-link:hover {
+  background-color: #E2CAD8;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 10px 0 15px 0; /* تقليل المسافة العلوية */
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  margin-top: -65px; /* تقريبها أكثر من الخط */
+}
+
+.user-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #E2CAD8;
+}
+
+.user-name {
+  font-size: 20px; 
+  font-weight: 600;
+  color: #E2CAD8;
+  word-break: break-word;
+  line-height: 1.2;
+  max-width: 140px;
+}
+
+@media screen and (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+    padding: 20px 15px;
+  }
+
+  .sidebar-title {
+    font-size: 18px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user-name {
+    font-size: 14px;
+  }
+}

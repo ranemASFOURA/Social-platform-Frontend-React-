@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { updateUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
-import NavigationBar from '../components/NavigationBar';
+import Sidebar from '../components/Sidebar';
+import RightPanel from '../components/RightPanel';
 import { useCurrentUser } from '../contexts/UserContext';
 import AvatarUploader from '../components/AvatarUploader';
 import InputField from '../components/InputField';
@@ -81,15 +82,20 @@ export default function EditProfilePage() {
   if (!user) return <div>Loading...</div>;
 
   return (
-    <div>
-      <NavigationBar />
+  <div style={{ display: 'flex' }}>
+    <Sidebar />
+
+    <div className="edit-profile-wrapper">
       <div className="edit-profile-container">
         <h2>Edit Profile</h2>
-        <AvatarUploader
-          selectedFile={selectedFile}
-          imageUrl={user.imageUrl || defaultAvatar}
-          onFileChange={(e) => setSelectedFile(e.target.files[0])}
-        />
+        <div className="avatar-center">
+  <AvatarUploader
+    selectedFile={selectedFile}
+    imageUrl={user.imageUrl || defaultAvatar}
+    onFileChange={(e) => setSelectedFile(e.target.files[0])}
+  />
+</div>
+
         <form className="edit-form" onSubmit={handleSave}>
           <InputField
             name="firstname"
@@ -124,5 +130,8 @@ export default function EditProfilePage() {
         </form>
       </div>
     </div>
-  );
+
+    <RightPanel />
+  </div>
+);
 }

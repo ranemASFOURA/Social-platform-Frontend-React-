@@ -51,9 +51,10 @@ export default function UserCard({ user }) {
           className="follow-btn"
           onClick={handleFollowToggle}
           style={{
-            backgroundColor: following ? "#efefef" : "#0095f6",
-            color: following ? "#000" : "#fff"
-          }}
+  backgroundColor: following ? "#E2CAD8" : "#C18DB4",
+  color: following ? "#0E1B48" : "#fff"
+}}
+
         >
           {following ? "Unfollow" : "Follow"}
         </button>
