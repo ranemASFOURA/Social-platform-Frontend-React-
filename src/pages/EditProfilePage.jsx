@@ -66,6 +66,7 @@ export default function EditProfilePage() {
         lastname: user.lastname,
         email: user.email,
         imageUrl: finalImageUrl,
+        bio: user.bio || '',
         ...(password.trim() && { password })
       };
 
@@ -86,49 +87,58 @@ export default function EditProfilePage() {
     <Sidebar />
 
     <div className="edit-profile-wrapper">
-      <div className="edit-profile-container">
-        <h2>Edit Profile</h2>
-        <div className="avatar-center">
-  <AvatarUploader
-    selectedFile={selectedFile}
-    imageUrl={user.imageUrl || defaultAvatar}
-    onFileChange={(e) => setSelectedFile(e.target.files[0])}
-  />
-</div>
+      <div className="edit-profile-card-wrapper">
+  <div className="edit-profile-card">
+    <h2>Edit Profile</h2>
+    <div className="avatar-center">
+      <AvatarUploader
+        selectedFile={selectedFile}
+        imageUrl={user.imageUrl || defaultAvatar}
+        onFileChange={(e) => setSelectedFile(e.target.files[0])}
+      />
+    </div>
 
-        <form className="edit-form" onSubmit={handleSave}>
-          <InputField
-            name="firstname"
-            value={user.firstname || ''}
-            onChange={handleChange}
-            placeholder="First Name"
-            error={errors.firstname}
-          />
-          <InputField
-            name="lastname"
-            value={user.lastname || ''}
-            onChange={handleChange}
-            placeholder="Last Name"
-            error={errors.lastname}
-          />
-          <InputField
-            name="email"
-            value={user.email || ''}
-            onChange={handleChange}
-            placeholder="Email"
-            error={errors.email}
-          />
-          <InputField
-            name="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="New Password (optional)"
-            error={errors.password}
-          />
-          <PrimaryButton type="submit">Save Changes</PrimaryButton>
-        </form>
-      </div>
+    <form className="edit-form" onSubmit={handleSave}>
+      <InputField
+        name="firstname"
+        value={user.firstname || ''}
+        onChange={handleChange}
+        placeholder="First Name"
+        error={errors.firstname}
+      />
+      <InputField
+        name="lastname"
+        value={user.lastname || ''}
+        onChange={handleChange}
+        placeholder="Last Name"
+        error={errors.lastname}
+      />
+      <InputField
+        name="email"
+        value={user.email || ''}
+        onChange={handleChange}
+        placeholder="Email"
+        error={errors.email}
+      />
+      <InputField
+        name="password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="New Password (optional)"
+        error={errors.password}
+      />
+      <InputField
+        name="bio"
+        value={user.bio || ''}
+        onChange={handleChange}
+        placeholder="Bio"
+      />
+      <PrimaryButton type="submit">Save Changes</PrimaryButton>
+    </form>
+  </div> {}
+</div> {}
+
     </div>
 
     <RightPanel />

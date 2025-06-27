@@ -1,34 +1,44 @@
-/* === ProfilePage.css === */
 
-body {
+.profile-page-layout {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
   background: linear-gradient(135deg, #E2CAD8, #87A7D0);
-  font-family: 'Segoe UI', sans-serif;
-  color: #0E1F2F;
-  margin: 0;
+}
+.profile-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .profile-main-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #E2CAD8, #87A7D0);
+  gap: 20px;
+  background: transparent;
 }
+
 
 .profile-summary {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 28px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  width: 92%;
-  max-width: 850px;
-  margin-bottom: 35px;
-  gap: 32px;
+  background-color: white;
+  padding: 24px;
+  width: 90%;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+  position: relative;
+  height: 180px;
 }
+
 
 .profile-avatar,
 .profile-avatar-large {
@@ -38,12 +48,101 @@ body {
   object-fit: cover;
   border: 3px solid #87A7D0;
 }
+.profile-header-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.profile-name {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0;
+  color: #0E1B48;
+}
+
+.bio-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+  margin-left: 15px;
+}
+
+.user-bio {
+  font-style: italic;
+  color: #27425D;
+  margin: 0;
+}
+
+.user-email {
+  font-size: 14px;
+  color: #555;
+}
+
+.edit-bio-button {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.center-section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.follow-stats {
+  display: flex;
+  gap: 40px;
+  justify-content: flex-start;
+  padding-left: 40px;
+  padding-top: 0px;
+}
+
+.stat-block {
+  text-align: center;
+  cursor: pointer;
+}
+
+.stat-label {
+  display: block;
+  font-size: 20px;
+  color: #666;
+}
+
+.stat-value {
+  font-size: 25px;
+  font-weight: bold;
+  color: #0E1B48;
+}
+.edit-button-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 100px; 
+}
+
+
+
+.edit-profile-button {
+  background-color: #0E1B48;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
 
 .profile-text-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .profile-username-row {
@@ -178,3 +277,63 @@ body {
   border-radius: 50%;
   object-fit: cover;
 }
+
+.user-bio {
+  font-style: italic;
+  color: #27425D;
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+}
+
+.edit-bio-button {
+  background: none;
+  border: none;
+  padding: 2px;
+  margin-left: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.edit-bio-button:hover {
+  transform: scale(1.15);
+}
+
+.bio-editor textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #87A7D0;
+  font-family: inherit;
+  margin-bottom: 8px;
+  resize: vertical;
+}
+
+.bio-editor button {
+  background-color: #0E1B48;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-profile-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 50px; 
+  padding-right: 12px; 
+  box-shadow: none; 
+  background: transparent;
+}
+
+
+.centered-stats {
+  justify-content: center !important;
+  margin-top: 16px;
+}
+
+
+

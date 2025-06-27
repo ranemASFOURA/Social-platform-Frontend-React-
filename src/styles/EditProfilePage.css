@@ -1,10 +1,9 @@
-
 .edit-profile-wrapper {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 60px;
+  align-items: center;
+  padding: 40px 0;
   background: linear-gradient(to bottom right, #d8c2d6, #a7c1dc);
   min-height: 100vh;
 }
@@ -13,15 +12,21 @@
   width: 100%;
   max-width: 460px;
   background: #ffffff;
-  padding: 30px 24px;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 32px 28px;
+  border-radius: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .edit-profile-container h2 {
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
   color: #0E1B48;
 }
 
@@ -32,3 +37,64 @@
   margin-bottom: 24px;
 }
 
+.edit-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-form input {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  outline: none;
+  transition: 0.2s ease;
+  background-color: #fefefe;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.edit-form input:focus {
+  border-color: #87A7D0;
+  box-shadow: 0 0 0 3px rgba(135, 167, 208, 0.3);
+}
+
+.primary-button {
+  margin-top: 12px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #0E1B48;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  align-self: flex-end;
+}
+
+.primary-button:hover {
+  background-color: #27425D;
+}
+.edit-profile-card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 60px;
+  width: 100%;
+}
+
+.edit-profile-card {
+  background-color: #f7f4fa;
+  border-radius: 24px;
+  padding: 30px 25px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -150px; 
+  gap: 0px;
+}

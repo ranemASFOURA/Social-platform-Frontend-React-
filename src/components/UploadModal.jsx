@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import '../styles/UploadModal.css';
 import { useCurrentUser } from '../contexts/UserContext';
 import { compressImage } from '../services/imageCompressor'; 
-import { convertToCDN } from '../utils/convertToCDN';
 import { uploadImageToMinIO, createPost } from '../services/postService';
 
 export default function UploadModal({ onClose }) {

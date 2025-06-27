@@ -9,3 +9,11 @@ export async function searchUsersByName(name) {
   if (!res.ok) throw new Error("Failed to fetch search results");
   return res.json();
 }
+
+export async function getFollowSuggestions() {
+  const res = await fetch(`${SEARCH_API}/suggestions`, {
+    headers: authHeader()
+  });
+  if (!res.ok) throw new Error("Failed to fetch follow suggestions");
+  return res.json();
+}

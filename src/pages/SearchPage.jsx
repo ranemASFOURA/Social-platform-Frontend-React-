@@ -61,7 +61,7 @@ export default function SearchPage() {
       <NavigationBar />
 
       <div className="search-content">
-        {/* حقل البحث */}
+        {}
         <form onSubmit={handleSubmit} className="search-form">
           <input
             type="text"
@@ -73,7 +73,7 @@ export default function SearchPage() {
           <button type="submit" className="search-button">Search</button>
         </form>
 
-        {/* نتائج البحث */}
+        {}
         <div className="search-results">
           {results.length > 0 ? (
             results.map((user) => (

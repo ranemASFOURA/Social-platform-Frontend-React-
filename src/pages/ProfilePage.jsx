@@ -1,17 +1,19 @@
+// ProfilePage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import NavigationBar from '../components/Sidebar';
+import Sidebar from '../components/Sidebar';
 import RightPanel from '../components/RightPanel';
-import defaultAvatar from '../assets/default-avatar.png';
-import '../styles/ProfilePage.css';
-import { getFollowers, getFollowing, followUser, unfollowUser, isFollowing } from '../services/followService';
-import { getUserById } from '../services/userService';
-import { getPostsByUser } from '../services/postService';
-import { useCurrentUser } from '../contexts/UserContext';
 import FollowPopup from '../components/FollowPopup';
 import ImageModal from '../components/ImageModal';
+import PrimaryButton from '../components/PrimaryButton';
+import { Pencil } from 'lucide-react';
+import defaultAvatar from '../assets/default-avatar.png';
+import { useCurrentUser } from '../contexts/UserContext';
+import { getUserById, updateUser } from '../services/userService';
+import { getFollowers, getFollowing, followUser, unfollowUser, isFollowing } from '../services/followService';
+import { getPostsByUser } from '../services/postService';
 import { convertToCDN } from '../utils/convertToCDN';
-import Sidebar from '../components/Sidebar';
+import '../styles/ProfilePage.css';
 
 export default function ProfilePage() {
   const { id } = useParams(); 
@@ -24,19 +26,22 @@ export default function ProfilePage() {
   const [following, setFollowing] = useState([]);
   const [posts, setPosts] = useState([]);
   const [showPopup, setShowPopup] = useState(null);
-  const [isFollowingUser, setIsFollowingUser] = useState(false);
   const [popupUsers, setPopupUsers] = useState([]);
-  const shouldReloadPosts = location.state?.reloadPosts || false;
+  const [isFollowingUser, setIsFollowingUser] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedCaption, setSelectedCaption] = useState('');
+  const [showBioEditor, setShowBioEditor] = useState(false);
+  const [bioInput, setBioInput] = useState('');
 
+  const isCurrentUser = profileUser?.id === currentUser?.id;
+  const shouldReloadPosts = location.state?.reloadPosts || false;
 
   useEffect(() => {
     if (!currentUser) navigate('/login');
   }, [currentUser]);
 
   useEffect(() => {
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
     setProfileUser(null);
     setFollowers([]);
     setFollowing([]);
@@ -45,130 +50,125 @@ export default function ProfilePage() {
   }, [id]);
 
   useEffect(() => {
-    async function fetchProfileUser() {
+    async function fetchUser() {
       const targetId = id || currentUser?.id;
       if (!targetId || profileUser?.id === targetId) return;
       const data = await getUserById(targetId);
       setProfileUser(data);
+      setBioInput(data.bio || '');
     }
-    fetchProfileUser();
+    fetchUser();
   }, [id, currentUser]);
 
   useEffect(() => {
-  async function fetchFollowData() {
-    const targetId = id || currentUser?.id;
-    if (!targetId) return;
-
-    try {
-      const rawFollowers = await getFollowers(targetId);
-      const rawFollowing = await getFollowing(targetId);
-
-      console.log("rawFollowers =", rawFollowers);
-
-      
-      const safeFollowers = Array.isArray(rawFollowers) ? rawFollowers : [];
-      const safeFollowing = Array.isArray(rawFollowing) ? rawFollowing : [];
-
-      setFollowers(safeFollowers.map(f => f.followerId));
-      setFollowing(safeFollowing.map(f => f.followingId));
-
-    } catch (error) {
-      console.error("faild to get followers", error);
-      setFollowers([]); 
-      setFollowing([]);
+    async function fetchFollowData() {
+      const targetId = id || currentUser?.id;
+      if (!targetId) return;
+      try {
+        const rawFollowers = await getFollowers(targetId);
+        const rawFollowing = await getFollowing(targetId);
+        setFollowers(Array.isArray(rawFollowers) ? rawFollowers.map(f => f.followerId) : []);
+        setFollowing(Array.isArray(rawFollowing) ? rawFollowing.map(f => f.followingId) : []);
+      } catch (err) {
+        console.error('Failed to fetch follow data', err);
+      }
     }
-  }
-
-  fetchFollowData();
-}, [id, currentUser]);
-
+    fetchFollowData();
+  }, [id, currentUser]);
 
   useEffect(() => {
-    async function fetchPopupUsers() {
-      const ids = showPopup === 'followers' ? followers : following;
-      const data = await Promise.all(ids.map(getUserById));
-      setPopupUsers(data);
-    }
-    if (showPopup) fetchPopupUsers();
+    if (!showPopup) return;
+    const ids = showPopup === 'followers' ? followers : following;
+    Promise.all(ids.map(getUserById)).then(setPopupUsers);
   }, [showPopup]);
 
   useEffect(() => {
-    async function fetchUserPosts() {
-      const targetId = id || currentUser?.id;
-      if (!targetId) return;
-      const userPosts = await getPostsByUser(targetId);
-      setPosts(userPosts.content || []);
+    const targetId = id || currentUser?.id;
+    if (profileUser && targetId) {
+      getPostsByUser(targetId).then(res => setPosts(res.content || []));
     }
-
-    if (profileUser) fetchUserPosts();
-    if (shouldReloadPosts) {
-      window.history.replaceState({}, document.title);
-    }
+    if (shouldReloadPosts) window.history.replaceState({}, document.title);
   }, [id, currentUser, profileUser, shouldReloadPosts]);
 
   useEffect(() => {
-    async function checkIfFollowing() {
-      if (currentUser && profileUser && currentUser.id !== profileUser.id) {
-        const following = await isFollowing(profileUser.id);
-        setIsFollowingUser(following);
-      }
+    if (currentUser && profileUser && currentUser.id !== profileUser.id) {
+      isFollowing(profileUser.id).then(setIsFollowingUser);
     }
-    checkIfFollowing();
   }, [currentUser, profileUser]);
+
+  const handleSaveBio = async () => {
+    const updated = await updateUser({ bio: bioInput });
+    setProfileUser(updated);
+    setShowBioEditor(false);
+  };
 
   const handleFollowToggle = async () => {
     if (!currentUser || !profileUser || currentUser.id === profileUser.id) return;
-
     const success = isFollowingUser
-      ? await unfollowUser(profileUser.id) 
+      ? await unfollowUser(profileUser.id)
       : await followUser(profileUser.id);
-
     if (success) setIsFollowingUser(!isFollowingUser);
   };
 
   if (!profileUser) return <div>Loading profile...</div>;
 
-  const isCurrentUser = profileUser.id === currentUser?.id;
-
   return (
-  <div className="profile-page-layout">
-    <div className="left-sidebar">
+    <div className="profile-page-layout">
       <Sidebar />
-    </div>
 
-    <div className="profile-center">
-      <div className="profile-main-container">
-        <div className="profile-summary">
-          <img
-            src={convertToCDN(profileUser.imageUrl)|| defaultAvatar}
-            alt="Avatar"
-            className="profile-avatar"
-          />
-          <div className="profile-text-info">
-            <div className="profile-username-row">
-              <h2>{profileUser.firstname} {profileUser.lastname}</h2>
-              {isCurrentUser ? (
-                <button className="edit-button" onClick={() => navigate('/edit-profile')}>
+      <div className="profile-center">
+        <div className="profile-main-container">
+          <div className="profile-summary">
+            <img
+              src={convertToCDN(profileUser.imageUrl) || defaultAvatar}
+              alt="Avatar"
+              className="profile-avatar"
+            />
+            <div className="profile-text-info">
+              <h2 className="profile-name">{profileUser.firstname} {profileUser.lastname}</h2>
+              <div className="bio-row">
+                {profileUser.bio && <p className="user-bio">{profileUser.bio}</p>}
+                {isCurrentUser && (
+                  <button className="edit-bio-button" onClick={() => setShowBioEditor(true)}>
+                    <Pencil size={16} color="#0E1B48" />
+                  </button>
+                )}
+              </div>
+              <p className="user-email">{profileUser.email}</p>
+            </div>
+
+            <div className="center-section centered-stats">
+              <div className="follow-stats">
+                <div className="stat-block">
+                  <span className="stat-label">Followers</span>
+                  <span className="stat-value" onClick={() => setShowPopup('followers')}>{followers.length}</span>
+                </div>
+                <div className="stat-block">
+                  <span className="stat-label">Following</span>
+                  <span className="stat-value" onClick={() => setShowPopup('following')}>{following.length}</span>
+                </div>
+              </div>
+            </div>
+            {isCurrentUser && (
+              <div className="edit-button-wrapper">
+                <PrimaryButton onClick={() => navigate('/edit-profile')}>
                   Edit profile
-                </button>
-              ) : (
-                <button
-                  className="edit-button"
-                  onClick={handleFollowToggle}
-                  style={{ backgroundColor: isFollowingUser ? "#efefef" : "#0095f6", color: isFollowingUser ? "#000" : "#fff" }}
-                >
-                  {isFollowingUser ? "Unfollow" : "Follow"}
-                </button>
-              )}
-            </div>
-
-            <div className="profile-follow-stats">
-              <span onClick={() => setShowPopup('followers')}>{followers.length} followers</span>
-              <span onClick={() => setShowPopup('following')}>{following.length} following</span>
-              <span>{posts.length} posts</span>
-            </div>
-            <p>{profileUser.email}</p>
+                </PrimaryButton>
+              </div>
+            )}
           </div>
+
+          {showBioEditor && (
+            <div className="bio-editor">
+              <textarea
+                value={bioInput}
+                onChange={(e) => setBioInput(e.target.value)}
+                rows={3}
+                placeholder="Write something about yourself..."
+              />
+              <button onClick={handleSaveBio}>Save</button>
+            </div>
+          )}
 
           {showPopup && (
             <FollowPopup
@@ -177,43 +177,39 @@ export default function ProfilePage() {
               onClose={() => setShowPopup(null)}
             />
           )}
+
+          <div className="profile-posts-tabs">
+            <button className="tab-button active">POSTS</button>
+            <button className="tab-button" disabled>SAVED</button>
+            <button className="tab-button" disabled>TAGGED</button>
+          </div>
+
+          <div className="post-grid">
+            {posts.map(post => (
+              <div
+                key={post.id}
+                className="post-grid-item"
+                onClick={() => {
+                  setSelectedImage(post.imageUrl);
+                  setSelectedCaption(post.caption);
+                }}
+              >
+                <img src={convertToCDN(post.imageUrl)} alt={post.caption} />
+              </div>
+            ))}
+          </div>
+
+          {selectedImage && (
+            <ImageModal
+              imageUrl={selectedImage}
+              caption={selectedCaption}
+              onClose={() => setSelectedImage(null)}
+            />
+          )}
         </div>
-
-        <div className="profile-posts-tabs">
-          <button className="tab-button active">POSTS</button>
-          <button className="tab-button" disabled>SAVED</button>
-          <button className="tab-button" disabled>TAGGED</button>
-        </div>
-
-        <div className="post-grid">
-  {posts.map(post => (
-    <div
-      key={post.id}
-      className="post-grid-item"
-      onClick={() => {
-        setSelectedImage(post.imageUrl);
-        setSelectedCaption(post.caption);
-      }}
-      style={{ cursor: "pointer" }}
-    >
-      <img src={convertToCDN(post.imageUrl)} alt={post.caption} />
-    </div>
-  ))}
-</div>
-
-        {selectedImage && (
-          <ImageModal
-            imageUrl={selectedImage}
-            caption={selectedCaption}
-            onClose={() => setSelectedImage(null)}
-          />
-        )}
       </div>
-    </div>
 
-    <div className="right-sidebar">
       <RightPanel />
     </div>
-  </div>
-);
+  );
 }
