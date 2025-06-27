@@ -1,6 +1,7 @@
 // src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import './App.css';
 import TimelinePage from './pages/TimelinePage';
 import SearchPage from './pages/SearchPage';
 import ProfilePage from './pages/ProfilePage';
