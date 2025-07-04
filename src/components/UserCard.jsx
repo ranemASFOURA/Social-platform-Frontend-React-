@@ -10,6 +10,7 @@ export default function UserCard({ user }) {
   const { currentUser } = useCurrentUser();
   const [following, setFollowing] = useState(false);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     if (currentUser && user.id !== currentUser.id) {

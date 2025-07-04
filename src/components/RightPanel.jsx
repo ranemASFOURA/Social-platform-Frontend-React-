@@ -2,28 +2,19 @@ import '../styles/RightPanel.css';
 import { useEffect, useState } from 'react';
 import { getFollowSuggestions } from '../services/searchService';
 import { isFollowing, followUser, unfollowUser } from '../services/followService';
+import { convertToCDN } from '../utils/convertToCDN';
+import { useCurrentUser } from '../contexts/UserContext';
 import defaultAvatar from '../assets/default-avatar.png';
 
 
 
 export default function RightPanel() {
   const [suggestions, setSuggestions] = useState([]);
+  const { currentUser } = useCurrentUser();
 
 
 useEffect(() => {
-  async function fetchSuggestions() {
-    try {
-      const result = await getFollowSuggestions();
-      setSuggestions(result);
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-    }
-  }
-
-  fetchSuggestions();
-}, []);
-
-useEffect(() => {
+  if (!currentUser) return;
   async function fetchSuggestions() {
     try {
       const result = await getFollowSuggestions();
@@ -40,7 +31,7 @@ useEffect(() => {
   }
 
   fetchSuggestions();
-}, []);
+}, [currentUser]);
 
 const handleToggleFollow = async (userId) => {
   const index = suggestions.findIndex((u) => u.id === userId);
@@ -64,10 +55,14 @@ const handleToggleFollow = async (userId) => {
 
   {suggestions.map(user => (
   <div className="suggestion-card" key={user.id}>
-    <img src={user.imageUrl || "/default-avatar.png"} alt={user.username} className="suggestion-avatar" />
+    <img
+  src={convertToCDN(user.imageUrl) || defaultAvatar}
+  alt={user.username}
+  className="suggestion-avatar"
+/>
     <div className="suggestion-info">
       <p className="suggestion-name">{user.firstname} {user.lastname}</p>
-      <p className="suggestion-meta">{user.followersCount || 0} followers · {user.postsCount || 0} posts</p>
+      <p className="suggestion-meta">{user.followersCount ?? 0} followers · {user.postsCount ?? 0} posts</p>
       <div className="suggestion-buttons">
         <button
   className="follow-btn"

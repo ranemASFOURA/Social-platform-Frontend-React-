@@ -1,4 +1,4 @@
-import { getFullUrl, jsonAuthHeader } from './api';
+import { getFullUrl, jsonAuthHeader, handleUnauthorized  } from './api';
 import { authHeader } from './api';
 
 
@@ -23,6 +23,7 @@ export async function updateUser(data) {
     headers: jsonAuthHeader(),
     body: JSON.stringify(data),
   });
+  if (handleUnauthorized(res)) return;
   if (!res.ok) {
     const text = await res.text();
     throw new Error("Server error: " + text);
@@ -35,6 +36,7 @@ export async function getUserById(userId) {
   const res = await fetch(`${BASE_URL}/${userId}`, {
     headers: jsonAuthHeader()
   });
+  if (handleUnauthorized(res)) return;
   if (!res.ok) throw new Error("Failed to fetch user data");
   return res.json();
 }

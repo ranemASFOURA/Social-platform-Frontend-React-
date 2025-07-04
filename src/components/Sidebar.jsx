@@ -12,6 +12,8 @@ import {
 import '../styles/Sidebar.css';
 import UploadModal from './UploadModal';
 import { useCurrentUser } from '../contexts/UserContext';
+import defaultAvatar from '../assets/default-avatar.png';
+import { convertToCDN } from '../utils/convertToCDN';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -59,7 +61,7 @@ export default function Sidebar() {
 
       <div className="user-info">
         <img
-          src={currentUser?.imageUrl || '/default-avatar.png'}
+          src={convertToCDN(currentUser.imageUrl) || defaultAvatar}
           alt="avatar"
           className="user-avatar"
         />

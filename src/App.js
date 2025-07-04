@@ -11,6 +11,8 @@ import UploadPostPage from './pages/UploadPostPage';
 import WelcomePage from './pages/WelcomePage';
 import LoginPage from './pages/LoginPage'; 
 import { UserProvider } from './contexts/UserContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -28,8 +30,19 @@ function App() {
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/upload" element={<UploadPostPage />} />
       </Routes>
+      <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
     </Router>
     </UserProvider>
+    
   );
 }
 

@@ -113,7 +113,7 @@ export default function ProfilePage() {
   if (!profileUser) return <div>Loading profile...</div>;
 
   return (
-    <div className="profile-page-layout">
+    <div className="timeline-wrapper">
       <Sidebar />
 
       <div className="profile-center">
@@ -149,13 +149,24 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
-            {isCurrentUser && (
-              <div className="edit-button-wrapper">
-                <PrimaryButton onClick={() => navigate('/edit-profile')}>
-                  Edit profile
-                </PrimaryButton>
-              </div>
-            )}
+            <div className="edit-button-wrapper">
+  {isCurrentUser ? (
+    <PrimaryButton onClick={() => navigate('/edit-profile')}>
+      Edit profile
+    </PrimaryButton>
+  ) : (
+    <PrimaryButton
+      onClick={handleFollowToggle}
+      style={{
+        backgroundColor: isFollowingUser ? "#E2CAD8" : "#C18DB4",
+        color: isFollowingUser ? "#0E1B48" : "#fff"
+      }}
+    >
+      {isFollowingUser ? "Unfollow" : "Follow"}
+    </PrimaryButton>
+  )}
+</div>
+
           </div>
 
           {showBioEditor && (

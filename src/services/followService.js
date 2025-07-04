@@ -22,10 +22,16 @@ export async function unfollowUser(followingId) {
 
 
 export async function isFollowing(followingId) {
+  try {
   const res = await fetch(`${BASE_URL}/is-following/${followingId}`, {
     headers: authHeader(),
   });
-  return res.ok;
+  return res.data;
+}
+catch (err) {
+    console.error("Error checking follow status", err);
+    return false; 
+  }
 }
 
 export async function getFollowers(userId) {
