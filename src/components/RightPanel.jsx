@@ -2,15 +2,16 @@ import '../styles/RightPanel.css';
 import { useEffect, useState } from 'react';
 import { getFollowSuggestions } from '../services/searchService';
 import { isFollowing, followUser, unfollowUser } from '../services/followService';
-import { convertToCDN } from '../utils/convertToCDN';
 import { useCurrentUser } from '../contexts/UserContext';
 import defaultAvatar from '../assets/default-avatar.png';
+import { loadImageFromGateway } from '../utils/imageLoader';
 
 
 
 export default function RightPanel() {
   const [suggestions, setSuggestions] = useState([]);
   const { currentUser } = useCurrentUser();
+  const [avatars, setAvatars] = useState({});
 
 
 useEffect(() => {
@@ -32,6 +33,30 @@ useEffect(() => {
 
   fetchSuggestions();
 }, [currentUser]);
+
+useEffect(() => {
+  const fetchAvatars = async () => {
+    const updates = {};
+
+    await Promise.all(suggestions.map(async (user) => {
+      if (user.imageUrl && !avatars[user.id]) {
+        try {
+          const blobUrl = await loadImageFromGateway(user.imageUrl);
+          updates[user.id] = blobUrl;
+        } catch (err) {
+          console.error("Failed to load image for user", user.id, err);
+        }
+      }
+    }));
+
+    if (Object.keys(updates).length > 0) {
+      setAvatars(prev => ({ ...prev, ...updates }));
+    }
+  };
+
+  fetchAvatars();
+}, [suggestions]);
+
 
 const handleToggleFollow = async (userId) => {
   const index = suggestions.findIndex((u) => u.id === userId);
@@ -56,10 +81,15 @@ const handleToggleFollow = async (userId) => {
   {suggestions.map(user => (
   <div className="suggestion-card" key={user.id}>
     <img
-  src={convertToCDN(user.imageUrl) || defaultAvatar}
+  src={avatars[user.id] || defaultAvatar}
   alt={user.username}
   className="suggestion-avatar"
+  onError={(e) => {
+    console.error("❌ Failed to load avatar for", user.username);
+    e.target.src = defaultAvatar;
+  }}
 />
+
     <div className="suggestion-info">
       <p className="suggestion-name">{user.firstname} {user.lastname}</p>
       <p className="suggestion-meta">{user.followersCount ?? 0} followers · {user.postsCount ?? 0} posts</p>

@@ -33,7 +33,6 @@ export default function TimelinePage() {
           ))}
         </main>
       </div>
-
       <RightPanel />
     </div>
   );

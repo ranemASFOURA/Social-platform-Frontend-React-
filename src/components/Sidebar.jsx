@@ -13,17 +13,25 @@ import '../styles/Sidebar.css';
 import UploadModal from './UploadModal';
 import { useCurrentUser } from '../contexts/UserContext';
 import defaultAvatar from '../assets/default-avatar.png';
-import { convertToCDN } from '../utils/convertToCDN';
+import { loadImageFromGateway } from '../utils/imageLoader';
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const { currentUser } = useCurrentUser();
 
+  const avatarSrc = currentUser?.imageUrl
+    ? loadImageFromGateway(currentUser.imageUrl)
+    : defaultAvatar;
+
   return (
     <div className="sidebar">
       <div className="logo-section" onClick={() => navigate('/timeline')}>
-        <img src={require('../assets/raselleLogo.png')} alt="Raselle Logo" className="sidebar-logo" />
+        <img
+          src={require('../assets/raselleLogo.png')}
+          alt="Raselle Logo"
+          className="sidebar-logo"
+        />
         <span className="sidebar-title">Raselle</span>
       </div>
 
@@ -61,11 +69,18 @@ export default function Sidebar() {
 
       <div className="user-info">
         <img
-          src={convertToCDN(currentUser.imageUrl) || defaultAvatar}
+          src={avatarSrc}
           alt="avatar"
           className="user-avatar"
+          onError={(e) => {
+            console.error("🛑 Failed to load avatar:", avatarSrc);
+            e.target.src = defaultAvatar;
+          }}
+          onLoad={() => console.log("✅ Avatar loaded:", avatarSrc)}
         />
-        <div className="user-name">{currentUser?.firstname} {currentUser?.lastname}</div>
+        <div className="user-name">
+          {currentUser?.firstname} {currentUser?.lastname}
+        </div>
       </div>
 
       {showModal && <UploadModal onClose={() => setShowModal(false)} />}

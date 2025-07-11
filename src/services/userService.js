@@ -41,11 +41,14 @@ export async function getUserById(userId) {
   return res.json();
 }
 
+
 export async function getCurrentUser() {
   const res = await fetch(`${BASE_URL}/me`, {
     headers: authHeader(),
   });
-  return res.json();
+  const data = await res.json();
+  console.log("Received current user from backend:", data);  
+  return data;
 }
 
 

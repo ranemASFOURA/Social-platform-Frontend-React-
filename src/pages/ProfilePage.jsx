@@ -12,14 +12,17 @@ import { useCurrentUser } from '../contexts/UserContext';
 import { getUserById, updateUser } from '../services/userService';
 import { getFollowers, getFollowing, followUser, unfollowUser, isFollowing } from '../services/followService';
 import { getPostsByUser } from '../services/postService';
-import { convertToCDN } from '../utils/convertToCDN';
+import { loadImageFromGateway } from '../utils/imageLoader';
 import '../styles/ProfilePage.css';
 
 export default function ProfilePage() {
   const { id } = useParams(); 
+  
   const navigate = useNavigate();
   const location = useLocation();
   const { currentUser } = useCurrentUser();
+  const [postImages, setPostImages] = useState({});
+
 
   const [profileUser, setProfileUser] = useState(null);
   const [followers, setFollowers] = useState([]);
@@ -32,6 +35,7 @@ export default function ProfilePage() {
   const [selectedCaption, setSelectedCaption] = useState('');
   const [showBioEditor, setShowBioEditor] = useState(false);
   const [bioInput, setBioInput] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   const isCurrentUser = profileUser?.id === currentUser?.id;
   const shouldReloadPosts = location.state?.reloadPosts || false;
@@ -50,15 +54,29 @@ export default function ProfilePage() {
   }, [id]);
 
   useEffect(() => {
-    async function fetchUser() {
-      const targetId = id || currentUser?.id;
-      if (!targetId || profileUser?.id === targetId) return;
-      const data = await getUserById(targetId);
-      setProfileUser(data);
-      setBioInput(data.bio || '');
+  async function fetchUser() {
+    const targetId = id || currentUser?.id;
+    if (!targetId || profileUser?.id === targetId) return;
+    const data = await getUserById(targetId);
+    setProfileUser(data);
+    setBioInput(data.bio || '');
+
+    // تحميل الصورة من خلال gateway
+    if (data.imageUrl) {
+      try {
+        const url = await loadImageFromGateway(data.imageUrl);
+        setAvatarUrl(url);
+      } catch (err) {
+        console.error("❌ Failed to load profile image:", err);
+        setAvatarUrl(null);
+      }
+    } else {
+      setAvatarUrl(null);
     }
-    fetchUser();
-  }, [id, currentUser]);
+  }
+
+  fetchUser();
+}, [id, currentUser]);
 
   useEffect(() => {
     async function fetchFollowData() {
@@ -83,12 +101,33 @@ export default function ProfilePage() {
   }, [showPopup]);
 
   useEffect(() => {
-    const targetId = id || currentUser?.id;
-    if (profileUser && targetId) {
-      getPostsByUser(targetId).then(res => setPosts(res.content || []));
-    }
-    if (shouldReloadPosts) window.history.replaceState({}, document.title);
-  }, [id, currentUser, profileUser, shouldReloadPosts]);
+  const targetId = id || currentUser?.id;
+  if (profileUser && targetId) {
+    getPostsByUser(targetId).then(async res => {
+      const postList = res.content || [];
+      setPosts(postList);
+
+      const loadedImages = {};
+      await Promise.all(
+        postList.map(async post => {
+          if (post.imageUrl) {
+            try {
+              const imgUrl = await loadImageFromGateway(post.imageUrl);
+              loadedImages[post.id] = imgUrl;
+            } catch (err) {
+              console.error(`❌ Failed to load post image for ${post.id}`, err);
+              loadedImages[post.id] = null;
+            }
+          }
+        })
+      );
+      setPostImages(loadedImages);
+    });
+  }
+
+  if (shouldReloadPosts) window.history.replaceState({}, document.title);
+}, [id, currentUser, profileUser, shouldReloadPosts]);
+
 
   useEffect(() => {
     if (currentUser && profileUser && currentUser.id !== profileUser.id) {
@@ -120,10 +159,11 @@ export default function ProfilePage() {
         <div className="profile-main-container">
           <div className="profile-summary">
             <img
-              src={convertToCDN(profileUser.imageUrl) || defaultAvatar}
-              alt="Avatar"
-              className="profile-avatar"
-            />
+  src={avatarUrl || defaultAvatar}
+  alt="Avatar"
+  className="profile-avatar"
+/>
+
             <div className="profile-text-info">
               <h2 className="profile-name">{profileUser.firstname} {profileUser.lastname}</h2>
               <div className="bio-row">
@@ -205,7 +245,7 @@ export default function ProfilePage() {
                   setSelectedCaption(post.caption);
                 }}
               >
-                <img src={convertToCDN(post.imageUrl)} alt={post.caption} />
+                <img src={postImages[post.id] || defaultAvatar} alt={post.caption} />
               </div>
             ))}
           </div>

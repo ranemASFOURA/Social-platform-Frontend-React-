@@ -3,8 +3,8 @@ import { Heart, MessageCircle, Send, Bookmark } from 'lucide-react';
 import { getUserById } from '../services/userService';
 import { timeAgo } from '../utils/timeAgo';
 import { useNavigate } from 'react-router-dom';
-import { convertToCDN } from '../utils/convertToCDN';
 import '../styles/FeedPostCard.css';
+import { loadImageFromGateway } from '../utils/imageLoader';
 
 export default function FeedPostCard({ post }) {
   const [user, setUser] = useState(null);
@@ -21,22 +21,21 @@ export default function FeedPostCard({ post }) {
     fetchUser();
   }, [post.userId]);
 
+  const postImgUrl = loadImageFromGateway(post.imageUrl);
+  const userImgUrl = loadImageFromGateway(user?.imageUrl);
+
   return (
     <div className="feed-post-card-advanced">
       {/* Left: Post Image */}
       <div className="feed-post-image-section">
-        <img
-          src={convertToCDN(post.imageUrl)}
-          alt={post.caption}
-          className="feed-post-image-large"
-        />
+        <img src={postImgUrl} className="feed-post-image-large" alt="Post" />
 
         {/* Action Icons on the right of the image */}
         <div className="feed-post-icons">
           <Heart
-        className={`icon ${liked ? 'liked' : ''}`}
-        onClick={toggleLike}
-      />
+            className={`icon ${liked ? 'liked' : ''}`}
+            onClick={toggleLike}
+          />
           <MessageCircle className="icon" />
           <Send className="icon" />
           <Bookmark className="icon" />
@@ -51,9 +50,9 @@ export default function FeedPostCard({ post }) {
           onClick={() => user && navigate(`/profile/${user.id}`)}
         >
           <img
-            src={convertToCDN(user?.imageUrl) || "/default-avatar.png"}
-            alt="User"
+            src={userImgUrl || "/default-avatar.png"}
             className="avatar-sm"
+            alt="User Avatar"
           />
           <div className="user-meta">
             <strong>{user ? `${user.firstname} ${user.lastname}` : post.userId}</strong>

@@ -13,7 +13,10 @@ export function UserProvider({ children }) {
   if (!token) return;
 
   getCurrentUser()
-    .then(data => setCurrentUser(data))
+    .then(data => {
+    console.log("Setting currentUser in context:", data);
+    setCurrentUser(data);
+  })
     .catch(err => {
       console.error(" Failed to fetch current user:", err);
       localStorage.removeItem('token');
