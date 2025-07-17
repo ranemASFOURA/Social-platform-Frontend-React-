@@ -61,7 +61,6 @@ export default function ProfilePage() {
     setProfileUser(data);
     setBioInput(data.bio || '');
 
-    // تحميل الصورة من خلال gateway
     if (data.imageUrl) {
       try {
         const url = await loadImageFromGateway(data.imageUrl);

@@ -13,9 +13,6 @@ export async function uploadImageToMinIO(file) {
 
   const uploadResponse = await fetch(uploadUrl, {
     method: 'PUT',
-    headers: {
-      'Content-Type': file.type,
-    },
     body: file,
   });
 

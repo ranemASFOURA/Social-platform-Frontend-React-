@@ -4,7 +4,7 @@ export function loadImageFromGateway(minioUrl) {
 
   try {
     let path;
-
+    // strip domain manually
     try {
       const url = new URL(minioUrl);     
       path = url.pathname;               
@@ -12,7 +12,8 @@ export function loadImageFromGateway(minioUrl) {
       path = minioUrl.startsWith('/') ? minioUrl : `/${minioUrl}`; 
     }
 
-    const finalUrl = `/api/image-proxy${path}`; 
+    const finalUrl = `${process.env.REACT_APP_API_URL}/api/image-proxy${path}`;
+    console.log("Image loading from:", finalUrl);
     return finalUrl;
 
   } catch (error) {
@@ -20,3 +21,4 @@ export function loadImageFromGateway(minioUrl) {
     return null;
   }
 }
+

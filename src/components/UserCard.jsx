@@ -48,6 +48,10 @@ export default function UserCard({ user }) {
         alt="avatar"
         className="avatar"
         onClick={(e) => e.stopPropagation()}
+        onError={(e) => {
+    console.error("Failed to load image:", avatarUrl);
+    e.target.src = defaultAvatar;
+  }}
       />
         <div className="user-card-info">
           <h4>{user.firstname} {user.lastname}</h4>

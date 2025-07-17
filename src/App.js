@@ -14,6 +14,7 @@ import { UserProvider } from './contexts/UserContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+console.log("REACT_APP_API_URL used is:", process.env.REACT_APP_API_URL);
 
 function App() {
   return (
