@@ -67,21 +67,26 @@ export default function Sidebar() {
 
       <hr className="divider" />
 
-      <div className="user-info">
-        <img
-          src={avatarSrc}
-          alt="avatar"
-          className="user-avatar"
-          onError={(e) => {
-            console.error("🛑 Failed to load avatar:", avatarSrc);
-            e.target.src = defaultAvatar;
-          }}
-          onLoad={() => console.log("✅ Avatar loaded:", avatarSrc)}
-        />
-        <div className="user-name">
-          {currentUser?.firstname} {currentUser?.lastname}
-        </div>
-      </div>
+      <div
+  className="user-info"
+  onClick={() => navigate(`/profile/${currentUser?.id}`)}
+  style={{ cursor: "pointer" }}
+>
+  <img
+    src={avatarSrc}
+    alt="avatar"
+    className="user-avatar"
+    onError={(e) => {
+      console.error("Failed to load avatar:", avatarSrc);
+      e.target.src = defaultAvatar;
+    }}
+    onLoad={() => console.log("Avatar loaded:", avatarSrc)}
+  />
+  <div className="user-name">
+    {currentUser?.firstname} {currentUser?.lastname}
+  </div>
+</div>
+
 
       {showModal && <UploadModal onClose={() => setShowModal(false)} />}
     </div>

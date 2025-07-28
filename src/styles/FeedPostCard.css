@@ -12,6 +12,8 @@
   padding: 24px;
   max-width: 1250px;
   margin: 30px auto;
+  min-height: 380px;
+  height: auto;
 }
 
 .feed-post-image-section {
@@ -21,11 +23,12 @@
 
 .feed-post-image-large {
   width: 380px;
-  height: auto;
+  height: 380px;
   border-radius: 16px;
   object-fit: cover;
   display: block;
 }
+
 
 .feed-post-icons {
   position: absolute;

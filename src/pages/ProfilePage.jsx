@@ -20,7 +20,7 @@ export default function ProfilePage() {
   
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentUser } = useCurrentUser();
+  const { currentUser , loading } = useCurrentUser();
   const [postImages, setPostImages] = useState({});
 
 
@@ -39,10 +39,14 @@ export default function ProfilePage() {
 
   const isCurrentUser = profileUser?.id === currentUser?.id;
   const shouldReloadPosts = location.state?.reloadPosts || false;
+  
 
   useEffect(() => {
-    if (!currentUser) navigate('/login');
-  }, [currentUser]);
+  if (!loading && !currentUser) {
+    navigate('/login');
+  }
+}, [loading, currentUser]);
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -66,7 +70,7 @@ export default function ProfilePage() {
         const url = await loadImageFromGateway(data.imageUrl);
         setAvatarUrl(url);
       } catch (err) {
-        console.error("❌ Failed to load profile image:", err);
+        console.error(" Failed to load profile image:", err);
         setAvatarUrl(null);
       }
     } else {
@@ -114,7 +118,7 @@ export default function ProfilePage() {
               const imgUrl = await loadImageFromGateway(post.imageUrl);
               loadedImages[post.id] = imgUrl;
             } catch (err) {
-              console.error(`❌ Failed to load post image for ${post.id}`, err);
+              console.error(`Failed to load post image for ${post.id}`, err);
               loadedImages[post.id] = null;
             }
           }

@@ -5,13 +5,14 @@ import { isFollowing, followUser, unfollowUser } from '../services/followService
 import { useCurrentUser } from '../contexts/UserContext';
 import defaultAvatar from '../assets/default-avatar.png';
 import { loadImageFromGateway } from '../utils/imageLoader';
-
+import { useNavigate } from 'react-router-dom';
 
 
 export default function RightPanel() {
   const [suggestions, setSuggestions] = useState([]);
   const { currentUser } = useCurrentUser();
   const [avatars, setAvatars] = useState({});
+  const navigate = useNavigate();
 
 
 useEffect(() => {
@@ -85,7 +86,7 @@ const handleToggleFollow = async (userId) => {
   alt={user.username}
   className="suggestion-avatar"
   onError={(e) => {
-    console.error("❌ Failed to load avatar for", user.username);
+    console.error("Failed to load avatar for", user.username);
     e.target.src = defaultAvatar;
   }}
 />

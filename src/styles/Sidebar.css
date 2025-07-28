@@ -62,7 +62,7 @@
 .divider {
   border: none;
   border-top: 1px solid #ccc;
-  margin: 10px 0 15px 0; /* تقليل المسافة العلوية */
+  margin: 10px 0 15px 0; 
 }
 
 .user-info {
@@ -70,7 +70,7 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 10px;
-  margin-top: -65px; /* تقريبها أكثر من الخط */
+  margin-top: -65px; 
 }
 
 .user-avatar {
@@ -113,4 +113,10 @@
   .user-name {
     font-size: 14px;
   }
+}
+
+.user-info:hover {
+  background-color: rgba(193, 141, 180, 0.1);
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
 }

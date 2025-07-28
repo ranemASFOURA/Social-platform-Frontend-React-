@@ -1,66 +1,81 @@
 .user-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
+  /*justify-content: space-between;*/
   background: #ffffff;
-  padding: 20px 30px;
-  margin: 15px 0;
+  padding: 20px 28px;
+  margin: 16px 0;
   border-radius: 18px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  height: 40%;
-  max-width: 600px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  width: 500px;       
+  max-width: 90%;      
   transition: transform 0.2s ease;
 }
 
 .user-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
-.user-card-avatar {
-  width: 68px;
-  height: 68px;
+.user-card-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+  min-width: 0;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 20px;
   border: 2px solid #C18DB4;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
 }
 
 .user-card-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
 }
 
 .user-card-info h4 {
   margin: 0;
-  font-size: 18px;
-  color: #0E1B48;
+  font-size: 20px;
   font-weight: 600;
+  color: #0E1B48;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
 }
 
 .user-card-info p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
   font-size: 14px;
-  color: #27425D;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
 }
 
 .follow-btn {
-  background-color: #A66B9E;
+  background-color: #C18DB4;
   color: white;
   border: none;
-  padding: 10px 22px;
+  padding: 10px 20px;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
 .follow-btn:hover {
   background-color: #A66B9E;
-}
-
-.user-card-left {
-  display: flex;
-  align-items: center;
 }

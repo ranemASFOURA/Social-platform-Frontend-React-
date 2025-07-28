@@ -26,7 +26,9 @@ export async function isFollowing(followingId) {
   const res = await fetch(`${BASE_URL}/is-following/${followingId}`, {
     headers: authHeader(),
   });
-  return res.data;
+  if (!res.ok) throw new Error('Failed to check follow status');
+    const data = await res.json(); 
+    return data === true;
 }
 catch (err) {
     console.error("Error checking follow status", err);

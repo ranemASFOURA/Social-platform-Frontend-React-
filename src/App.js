@@ -7,7 +7,7 @@ import SearchPage from './pages/SearchPage';
 import ProfilePage from './pages/ProfilePage';
 import SignupPage from './pages/SignupPage';
 import EditProfilePage from './pages/EditProfilePage';
-import UploadPostPage from './pages/UploadPostPage';
+//import UploadPostPage from './pages/UploadPostPage';
 import WelcomePage from './pages/WelcomePage';
 import LoginPage from './pages/LoginPage'; 
 import { UserProvider } from './contexts/UserContext';
@@ -29,7 +29,6 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
-        <Route path="/upload" element={<UploadPostPage />} />
       </Routes>
       <ToastContainer
           position="top-center"

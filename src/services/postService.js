@@ -12,14 +12,6 @@ export async function getPostsByUser(userId) {
   return res.json();
 }
 
-//export async function generateUploadUrl(filename) {
- // const res = await fetch(`${BASE_URL}/images/generate-upload-url?filename=${filename}`, {
-   // headers: jsonAuthHeader(),
-  //});
-  //if (!res.ok) throw new Error("Failed to generate upload URL");
- // return res.json();
-//}
-
 export async function createPost(postData) {
   const res = await fetch(getFullUrl('/api/posts'), {
     method: 'POST',
