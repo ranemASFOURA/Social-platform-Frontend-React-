@@ -90,6 +90,4 @@ photo-frontend/
 * Works in tandem with backend microservices via **Spring Cloud Gateway**.
 
 ---
-
-```
 ````
