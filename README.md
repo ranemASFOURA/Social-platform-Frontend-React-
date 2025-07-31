@@ -1,35 +1,95 @@
-# Getting Started with Create React App
+# 🌐 Photo Sharing Platform - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the **React-based frontend** for the Photo Sharing Platform, a social application where users can register, follow others, upload images, and view personalized photo feeds. The frontend interacts with a backend system built using Spring Boot microservices and communicates through a central API Gateway.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📁 Project Structure
 
-### `npm start`
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+photo-frontend/
+├── public/                 # Static files (HTML template, favicon, etc.)
+├── src/
+│   ├── assets/             # Images, icons, and static design assets
+│   ├── components/         # Reusable UI components (Navbar, Sidebar, Cards)
+│   ├── pages/              # Main route pages (Timeline, Profile, Login, etc.)
+│   ├── services/           # API logic to communicate with backend services
+│   ├── utils/              # Helper functions (e.g., token parsing)
+│   ├── App.js              # Main application component with route definitions
+│   ├── index.js            # React entry point
+│   └── styles.css          # Global styles
+├── .env                    # Environment variables
+├── package.json            # Project metadata and dependencies
+└── README.md               # This file
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🧩 Key Features
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- 🖼️ View and upload image posts
+- 🔐 User authentication via JWT
+- 🧑‍🤝‍🧑 Follow/unfollow users
+- 📰 Personalized timeline feed
+- 📷 Profile management with bio and avatar
+- 🔎 User search with suggestions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## ▶️ How to Run the Frontend Locally
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+> **Prerequisites**:
+>
+> - Node.js (v18 or higher)
+> - Backend and API Gateway running (required)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+````
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. **Run the app**:
+
+   ```bash
+   npm start
+   ```
+
+---
+
+## 🧰 Tech Stack
+
+| Layer          | Technology                      |
+| -------------- | ------------------------------- |
+| Framework      | React.js                        |
+| State Handling | useState, useEffect             |
+| HTTP Client    | Axios                           |
+| Auth           | JWT          |
+| Styling        | CSS Modules / Custom            |
+| Media Handling | MinIO via presigned URLs        |
+| Pagination     | react-infinite-scroll-component |
+
+---
+
+## 📦 Notable Dependencies
+
+* `react-router-dom` – Routing between pages
+* `axios` – HTTP requests
+* `jwt-decode` – Decode JWT tokens from local storage
+* `react-icons` – UI icons
+* `react-infinite-scroll-component` – Infinite feed scroll
+
+---
+
+## 🧠 Notes
+
+* Avatar and post images are uploaded using **MinIO presigned URLs**.
+* Works in tandem with backend microservices via **Spring Cloud Gateway**.
+
+---
+
+```
+````
