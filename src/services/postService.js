@@ -56,3 +56,13 @@ export async function getMyPosts() {
   });
   return res.json();
 }
+
+export async function deletePost(postId) {
+  const res = await fetch(`${BASE_URL}/${postId}`, {
+    method: 'DELETE',
+    headers: authHeader(),
+  });
+
+  if (handleUnauthorized(res)) return;
+  if (!res.ok) throw new Error('Failed to delete post');
+}

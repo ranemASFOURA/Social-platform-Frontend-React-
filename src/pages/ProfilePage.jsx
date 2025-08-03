@@ -11,7 +11,7 @@ import defaultAvatar from '../assets/default-avatar.png';
 import { useCurrentUser } from '../contexts/UserContext';
 import { getUserById, updateUser } from '../services/userService';
 import { getFollowers, getFollowing, followUser, unfollowUser, isFollowing } from '../services/followService';
-import { getPostsByUser } from '../services/postService';
+import { getPostsByUser,deletePost } from '../services/postService';
 import { loadImageFromGateway } from '../utils/imageLoader';
 import '../styles/ProfilePage.css';
 
@@ -39,6 +39,23 @@ export default function ProfilePage() {
 
   const isCurrentUser = profileUser?.id === currentUser?.id;
   const shouldReloadPosts = location.state?.reloadPosts || false;
+
+  const handleDeletePost = async (postId) => {
+  if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+  try {
+    await deletePost(postId);
+    setPosts(prev => prev.filter(post => post.id !== postId));
+    setPostImages(prev => {
+      const copy = { ...prev };
+      delete copy[postId];
+      return copy;
+    });
+  } catch (err) {
+    console.error("Failed to delete post:", err);
+    alert("Failed to delete post");
+  }
+};
   
 
   useEffect(() => {
@@ -248,6 +265,18 @@ export default function ProfilePage() {
                   setSelectedCaption(post.caption);
                 }}
               >
+                <img src={postImages[post.id] || defaultAvatar} alt={post.caption} />
+  {isCurrentUser && (
+    <button
+      className="delete-post-button"
+      onClick={(e) => {
+        e.stopPropagation(); // لمنع فتح ImageModal
+        handleDeletePost(post.id);
+      }}
+    >
+      🗑️
+    </button>
+  )}
                 <img src={postImages[post.id] || defaultAvatar} alt={post.caption} />
               </div>
             ))}
